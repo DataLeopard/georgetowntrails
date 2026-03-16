@@ -1,0 +1,11 @@
+{
+  "name": "trail-tracker",
+  "template": "react-app",
+  "description": "Trail tracking map with collapsible sidebar - Georgetown TX routes, days/weeks/months view",
+  "createdAt": "2026-03-16T03:01:00.097Z",
+  "language": "javascript",
+  "category": "web",
+  "status": "active",
+  "features": ["docs", "health-check"],
+  "port": 5173
+}
