@@ -10,11 +10,27 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 });
 
+/** Escape HTML to prevent XSS in tooltips */
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+/** Validate a hex color to prevent XSS in divIcon style injection */
+function safeColor(color) {
+  return /^#[0-9a-fA-F]{3,8}$/.test(color) ? color : '#888';
+}
+
 export default function Map({ routes, activeRouteId, onRouteClick }) {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const polylinesRef = useRef({});
   const markersRef = useRef({});
+
+  // Keep onRouteClick in a ref to avoid stale closures
+  const onRouteClickRef = useRef(onRouteClick);
+  useEffect(() => { onRouteClickRef.current = onRouteClick; });
 
   // Init map once
   useEffect(() => {
@@ -36,7 +52,7 @@ export default function Map({ routes, activeRouteId, onRouteClick }) {
     };
   }, []);
 
-  // Draw/update routes
+  // Draw routes (only when routes change)
   useEffect(() => {
     const map = mapInstanceRef.current;
     if (!map || !routes.length) return;
@@ -48,20 +64,22 @@ export default function Map({ routes, activeRouteId, onRouteClick }) {
     markersRef.current = {};
 
     routes.forEach((route) => {
-      const isActive = route.id === activeRouteId;
-      const weight = isActive ? 5 : 3;
-      const opacity = isActive ? 1 : 0.6;
+      const color = safeColor(route.color);
 
       const poly = L.polyline(route.coords, {
-        color: route.color,
-        weight,
-        opacity,
+        color,
+        weight: 3,
+        opacity: 0.6,
         lineJoin: 'round',
         lineCap: 'round',
       }).addTo(map);
 
-      poly.on('click', () => onRouteClick(route.id));
-      poly.bindTooltip(`<strong>${route.name}</strong><br>${route.distance} mi · ${route.duration}`, {
+      poly.on('click', () => onRouteClickRef.current(route.id));
+
+      const safeName = escapeHtml(route.name);
+      const safeDistance = escapeHtml(String(route.distance));
+      const safeDuration = escapeHtml(route.duration);
+      poly.bindTooltip(`<strong>${safeName}</strong><br>${safeDistance} mi · ${safeDuration}`, {
         sticky: true,
         className: 'route-tooltip',
       });
@@ -74,7 +92,7 @@ export default function Map({ routes, activeRouteId, onRouteClick }) {
         html: `<div style="
           width:12px;height:12px;
           border-radius:50%;
-          background:${route.color};
+          background:${color};
           border:2px solid white;
           box-shadow:0 0 4px rgba(0,0,0,0.4);
         "></div>`,
@@ -83,27 +101,42 @@ export default function Map({ routes, activeRouteId, onRouteClick }) {
       });
 
       const marker = L.marker(route.coords[0], { icon: startIcon }).addTo(map);
-      marker.on('click', () => onRouteClick(route.id));
+      marker.on('click', () => onRouteClickRef.current(route.id));
       markersRef.current[route.id] = marker;
     });
-  }, [routes, activeRouteId, onRouteClick]);
+  }, [routes]);
 
-  // Fly to active route
+  // Style updates + fly to active route (depends on activeRouteId)
   useEffect(() => {
     const map = mapInstanceRef.current;
-    if (!map || !activeRouteId) return;
-    const poly = polylinesRef.current[activeRouteId];
-    if (poly) {
-      map.flyToBounds(poly.getBounds(), { padding: [40, 40], duration: 0.8 });
-      poly.setStyle({ weight: 5, opacity: 1 });
-    }
-    // Dim others
-    Object.entries(polylinesRef.current).forEach(([id, p]) => {
-      if (Number(id) !== activeRouteId) {
-        p.setStyle({ weight: 3, opacity: 0.35 });
-      }
+    if (!map) return;
+
+    // Reset all to default style
+    Object.values(polylinesRef.current).forEach(p => {
+      p.setStyle({ weight: 3, opacity: 0.6 });
     });
+
+    if (activeRouteId) {
+      const activePoly = polylinesRef.current[activeRouteId];
+      if (activePoly) {
+        activePoly.setStyle({ weight: 5, opacity: 1 });
+        map.flyToBounds(activePoly.getBounds(), { padding: [40, 40], duration: 0.8 });
+      }
+      // Dim non-active routes
+      Object.entries(polylinesRef.current).forEach(([id, p]) => {
+        if (Number(id) !== activeRouteId) {
+          p.setStyle({ weight: 3, opacity: 0.35 });
+        }
+      });
+    }
   }, [activeRouteId]);
 
-  return <div ref={mapRef} style={{ width: '100%', height: '100%' }} />;
+  return (
+    <div
+      ref={mapRef}
+      style={{ width: '100%', height: '100%' }}
+      role="application"
+      aria-label="Trail map of Georgetown, Texas"
+    />
+  );
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import Map from './components/Map';
 import Sidebar from './components/Sidebar';
 import { routes } from './data/routes';
@@ -8,9 +8,20 @@ export default function App() {
   const [activeRouteId, setActiveRouteId] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  const handleRouteClick = (id) => {
+  const handleRouteClick = useCallback((id) => {
     setActiveRouteId(prev => prev === id ? null : id);
-  };
+  }, []);
+
+  // Escape key dismisses active route
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setActiveRouteId(null);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const activeRoute = activeRouteId ? routes.find(r => r.id === activeRouteId) : null;
 
   return (
     <div className="app-shell">
@@ -21,25 +32,18 @@ export default function App() {
         isOpen={sidebarOpen}
         onToggle={() => setSidebarOpen(o => !o)}
       />
-      <main className={`map-container ${sidebarOpen ? 'sidebar-open' : ''}`}>
+      <main className={`map-container ${sidebarOpen ? 'sidebar-open' : ''}`} aria-label="Trail map view">
         <Map
           routes={routes}
           activeRouteId={activeRouteId}
           onRouteClick={handleRouteClick}
         />
-        {activeRouteId && (
+        {activeRoute && (
           <div className="active-route-banner">
-            {(() => {
-              const r = routes.find(r => r.id === activeRouteId);
-              return r ? (
-                <>
-                  <span className="banner-dot" style={{ background: r.color }} />
-                  <strong>{r.name}</strong>
-                  <span>{r.distance} mi · {r.duration}</span>
-                  <button onClick={() => setActiveRouteId(null)}>✕</button>
-                </>
-              ) : null;
-            })()}
+            <span className="banner-dot" style={{ background: activeRoute.color }} />
+            <strong>{activeRoute.name}</strong>
+            <span>{activeRoute.distance} mi · {activeRoute.duration}</span>
+            <button onClick={() => setActiveRouteId(null)} aria-label="Deselect route">✕</button>
           </div>
         )}
       </main>

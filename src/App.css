@@ -316,3 +316,16 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
 }
 .route-tooltip::before { display: none !important; }
 .leaflet-control-attribution { font-size: 0.65rem !important; opacity: 0.6; }
+
+/* ── Mobile breakpoint ───────────────────────────────────── */
+@media (max-width: 640px) {
+  :root { --sidebar-w: 100vw; }
+
+  .sidebar {
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.6);
+  }
+
+  .map-container.sidebar-open {
+    margin-left: 0;
+  }
+}

@@ -162,11 +162,17 @@ export const routes = [
   },
 ];
 
+/** Parse a YYYY-MM-DD string as local date (avoids UTC-shift timezone bug) */
+function parseLocalDate(dateStr) {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  return new Date(y, m - 1, d);
+}
+
 export const getRoutesByPeriod = (routes) => {
   const periods = { days: {}, weeks: {}, months: {} };
 
   routes.forEach((route) => {
-    const date = new Date(route.date);
+    const date = parseLocalDate(route.date);
     const dayKey = route.date;
     const weekKey = getWeekLabel(date);
     const monthKey = date.toLocaleString("default", { month: "long", year: "numeric" });

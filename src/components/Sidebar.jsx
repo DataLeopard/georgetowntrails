@@ -18,11 +18,18 @@ export default function Sidebar({ routes, activeRouteId, onRouteClick, isOpen, o
   return (
     <>
       {/* Toggle button - always visible */}
-      <button className="sidebar-toggle" onClick={onToggle} title={isOpen ? 'Close sidebar' : 'Open sidebar'}>
+      <button
+        className="sidebar-toggle"
+        onClick={onToggle}
+        title={isOpen ? 'Close sidebar' : 'Open sidebar'}
+        aria-expanded={isOpen}
+        aria-controls="trail-sidebar"
+        aria-label={isOpen ? 'Close sidebar' : 'Open sidebar'}
+      >
         {isOpen ? '◀' : '▶'}
       </button>
 
-      <aside className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
+      <aside id="trail-sidebar" className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
         <div className="sidebar-header">
           <h1>Reactor</h1>
           <p className="sidebar-subtitle">Georgetown, TX Trails</p>
@@ -52,7 +59,11 @@ export default function Sidebar({ routes, activeRouteId, onRouteClick, isOpen, o
             const groupDist = groupRoutes.reduce((s, r) => s + r.distance, 0).toFixed(1);
             return (
               <div key={groupKey} className="route-group">
-                <button className="group-header" onClick={() => toggleGroup(groupKey)}>
+                <button
+                  className="group-header"
+                  onClick={() => toggleGroup(groupKey)}
+                  aria-expanded={!isCollapsed}
+                >
                   <span className="group-chevron">{isCollapsed ? '▸' : '▾'}</span>
                   <span className="group-title">{groupKey}</span>
                   <span className="group-meta">{groupRoutes.length} · {groupDist}mi</span>
@@ -80,7 +91,12 @@ export default function Sidebar({ routes, activeRouteId, onRouteClick, isOpen, o
 
 function RouteCard({ route, isActive, onClick }) {
   return (
-    <button className={`route-card ${isActive ? 'active' : ''}`} onClick={onClick}>
+    <button
+      className={`route-card ${isActive ? 'active' : ''}`}
+      onClick={onClick}
+      aria-label={`${route.name}, ${route.distance} miles, ${route.duration}`}
+      aria-pressed={isActive}
+    >
       <div className="route-color-bar" style={{ background: route.color }} />
       <div className="route-info">
         <div className="route-name">{route.name}</div>
