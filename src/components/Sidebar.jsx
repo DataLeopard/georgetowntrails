@@ -1,17 +1,35 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { getRoutesByPeriod } from '../data/routes';
 
 const VIEW_MODES = ['days', 'weeks', 'months'];
 
+/** Count routes from the last N days */
+function countRecentRoutes(routes, days) {
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - days);
+  const cutoffStr = cutoff.toISOString().slice(0, 10);
+  return routes.filter(r => r.date >= cutoffStr).length;
+}
+
 export default function Sidebar({ routes, activeRouteId, onRouteClick, isOpen, onToggle }) {
   const [viewMode, setViewMode] = useState('weeks');
   const [collapsed, setCollapsed] = useState({});
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const periods = getRoutesByPeriod(routes);
+  // Filter routes by search term
+  const filteredRoutes = useMemo(() => {
+    if (!searchTerm.trim()) return routes;
+    const q = searchTerm.toLowerCase();
+    return routes.filter(r => r.name.toLowerCase().includes(q));
+  }, [routes, searchTerm]);
+
+  const periods = getRoutesByPeriod(filteredRoutes);
   const groups = periods[viewMode];
 
   const totalDist = routes.reduce((s, r) => s + r.distance, 0).toFixed(1);
   const totalRuns = routes.length;
+  const thisWeek = countRecentRoutes(routes, 7);
+  const thisMonth = countRecentRoutes(routes, 30);
 
   const toggleGroup = (key) => setCollapsed(c => ({ ...c, [key]: !c[key] }));
 
@@ -36,6 +54,21 @@ export default function Sidebar({ routes, activeRouteId, onRouteClick, isOpen, o
           <div className="sidebar-stats">
             <div className="stat"><span className="stat-value">{totalRuns}</span><span className="stat-label">Routes</span></div>
             <div className="stat"><span className="stat-value">{totalDist}</span><span className="stat-label">Miles</span></div>
+            <div className="stat"><span className="stat-value">{thisWeek}</span><span className="stat-label">This Wk</span></div>
+            <div className="stat"><span className="stat-value">{thisMonth}</span><span className="stat-label">30 Days</span></div>
+          </div>
+          <div className="sidebar-search">
+            <input
+              type="text"
+              className="search-input"
+              placeholder="Search routes..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              aria-label="Search routes by name"
+            />
+            {searchTerm && (
+              <button className="search-clear" onClick={() => setSearchTerm('')} aria-label="Clear search">✕</button>
+            )}
           </div>
         </div>
 
@@ -54,6 +87,15 @@ export default function Sidebar({ routes, activeRouteId, onRouteClick, isOpen, o
 
         {/* Route groups */}
         <div className="route-groups">
+          {filteredRoutes.length === 0 && (
+            <div className="sidebar-empty-state">
+              {searchTerm ? (
+                <><p>No routes matching "{searchTerm}"</p><button className="search-clear-link" onClick={() => setSearchTerm('')}>Clear search</button></>
+              ) : (
+                <p>No routes recorded yet.</p>
+              )}
+            </div>
+          )}
           {Object.entries(groups).sort((a, b) => b[0].localeCompare(a[0])).map(([groupKey, groupRoutes]) => {
             const isCollapsed = collapsed[groupKey];
             const groupDist = groupRoutes.reduce((s, r) => s + r.distance, 0).toFixed(1);

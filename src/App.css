@@ -55,6 +55,7 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
   box-shadow: 0 4px 20px rgba(0,0,0,0.4);
   z-index: 500;
   white-space: nowrap;
+  animation: slideUp 0.3s ease;
 }
 
 .banner-dot {
@@ -244,12 +245,22 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
   border-radius: var(--radius);
   cursor: pointer;
   text-align: left;
-  transition: all 0.15s;
+  transition: all 0.2s ease;
   position: relative;
 }
 
-.route-card:hover { border-color: var(--border); }
-.route-card.active { border-color: var(--accent); background: rgba(59,130,246,0.1); }
+.route-card:hover {
+  border-color: var(--border);
+  background: var(--surface);
+  transform: translateX(2px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.route-card.active {
+  border-color: var(--accent);
+  background: rgba(59,130,246,0.1);
+  transform: translateX(2px);
+}
 
 .route-color-bar {
   width: 4px;
@@ -302,6 +313,137 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
 
 .route-type-badge.trail { background: rgba(22,163,74,0.15); color: #4ade80; }
 .route-type-badge.road  { background: rgba(234,88,12,0.15);  color: #fb923c; }
+
+/* ── Map loading overlay ─────────────────────────────────── */
+.map-loading-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: rgba(15, 23, 42, 0.85);
+  z-index: 600;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  animation: fadeIn 0.2s ease;
+}
+
+.map-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateX(-50%) translateY(12px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ── Map empty state ─────────────────────────────────────── */
+.map-empty-state {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  z-index: 500;
+  pointer-events: none;
+}
+
+.map-empty-state .map-empty-icon {
+  font-size: 3rem;
+  opacity: 0.6;
+}
+
+.map-empty-state h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.map-empty-state p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* ── Search input ────────────────────────────────────────── */
+.sidebar-search {
+  position: relative;
+  margin-top: 12px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px 32px 8px 12px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 0.82rem;
+  font-family: var(--font);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.search-input::placeholder { color: var(--text-muted); }
+.search-input:focus { border-color: var(--accent); }
+
+.search-clear {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 2px 4px;
+  border-radius: 3px;
+  transition: color 0.15s;
+}
+
+.search-clear:hover { color: var(--text); }
+
+/* ── Sidebar empty state ─────────────────────────────────── */
+.sidebar-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 40px 16px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.search-clear-link {
+  background: none;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  font-size: 0.82rem;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.search-clear-link:hover { color: var(--text); }
 
 /* ── Leaflet overrides ────────────────────────────────────── */
 .leaflet-container { background: #1a2332; }

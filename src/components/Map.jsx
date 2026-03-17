@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -27,6 +27,7 @@ export default function Map({ routes, activeRouteId, onRouteClick }) {
   const mapInstanceRef = useRef(null);
   const polylinesRef = useRef({});
   const markersRef = useRef({});
+  const [mapLoading, setMapLoading] = useState(true);
 
   // Keep onRouteClick in a ref to avoid stale closures
   const onRouteClickRef = useRef(onRouteClick);
@@ -41,10 +42,12 @@ export default function Map({ routes, activeRouteId, onRouteClick }) {
       zoomControl: true,
     });
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    const tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a>',
       maxZoom: 19,
     }).addTo(mapInstanceRef.current);
+
+    tileLayer.on('load', () => setMapLoading(false));
 
     return () => {
       mapInstanceRef.current?.remove();
@@ -132,11 +135,26 @@ export default function Map({ routes, activeRouteId, onRouteClick }) {
   }, [activeRouteId]);
 
   return (
-    <div
-      ref={mapRef}
-      style={{ width: '100%', height: '100%' }}
-      role="application"
-      aria-label="Trail map of Georgetown, Texas"
-    />
+    <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+      <div
+        ref={mapRef}
+        style={{ width: '100%', height: '100%' }}
+        role="application"
+        aria-label="Trail map of Georgetown, Texas"
+      />
+      {mapLoading && (
+        <div className="map-loading-overlay">
+          <div className="map-spinner" />
+          <span>Loading map tiles...</span>
+        </div>
+      )}
+      {!routes.length && !mapLoading && (
+        <div className="map-empty-state">
+          <div className="map-empty-icon">🗺️</div>
+          <h2>No Routes Yet</h2>
+          <p>Add your first trail or route to see it on the map.</p>
+        </div>
+      )}
+    </div>
   );
 }
