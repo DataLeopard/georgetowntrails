@@ -482,7 +482,49 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
   pointer-events: none;
 }
 
-/* ── Route card map background & arrow ───────────────────── */
+/* ── Comic book styling ──────────────────────────────────── */
+.comic-header {
+  border-bottom: 3px solid var(--accent) !important;
+}
+
+.comic-header h1 {
+  font-family: 'Impact', 'Arial Black', sans-serif;
+  font-size: 1.6rem !important;
+  letter-spacing: 2px !important;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+}
+
+.comic-stat {
+  border: 2px solid var(--border) !important;
+  box-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+}
+
+.comic-panel {
+  border-left: 3px solid var(--accent);
+  margin: 2px 6px;
+  padding-left: 2px;
+}
+
+.comic-card {
+  border: 2px solid var(--border) !important;
+  border-radius: 4px !important;
+  box-shadow: 3px 3px 0 rgba(0,0,0,0.4);
+  transition: all 0.15s ease !important;
+}
+
+.comic-card:hover {
+  border-color: var(--text) !important;
+  box-shadow: 4px 4px 0 rgba(0,0,0,0.5) !important;
+  transform: translateX(2px) translateY(-1px) !important;
+}
+
+.comic-card.active {
+  border-color: var(--accent) !important;
+  box-shadow: 4px 4px 0 rgba(59,130,246,0.4) !important;
+}
+
+/* ── Route card map background (VIBRANT) ─────────────────── */
 .route-card {
   overflow: hidden;
 }
@@ -492,33 +534,47 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
   inset: 0;
   background-size: cover;
   background-position: center;
-  opacity: 0.12;
-  transition: opacity 0.3s ease;
+  opacity: 0.35;
+  filter: saturate(1.6) contrast(1.2) brightness(0.8);
+  transition: opacity 0.3s ease, filter 0.3s ease;
   pointer-events: none;
   z-index: 0;
 }
 
 .route-card:hover .route-card-map-bg {
-  opacity: 0.22;
+  opacity: 0.5;
+  filter: saturate(1.8) contrast(1.3) brightness(0.85);
 }
 
 .route-card.active .route-card-map-bg {
-  opacity: 0.25;
+  opacity: 0.55;
+  filter: saturate(2) contrast(1.3) brightness(0.9);
+}
+
+/* Halftone dot overlay for comic feel */
+.route-card-halftone {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.08;
+  background-image: radial-gradient(circle, var(--text) 1px, transparent 1px);
+  background-size: 4px 4px;
 }
 
 .route-card-path-overlay {
   position: absolute;
   top: 50%;
-  right: 28px;
+  right: 24px;
   transform: translateY(-50%);
-  opacity: 0.15;
+  opacity: 0.3;
   pointer-events: none;
   z-index: 0;
   transition: opacity 0.3s ease;
 }
 
 .route-card:hover .route-card-path-overlay {
-  opacity: 0.35;
+  opacity: 0.55;
 }
 
 .route-card .route-color-bar,
@@ -526,6 +582,15 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
 .route-card .route-type-badge {
   position: relative;
   z-index: 1;
+}
+
+/* Text shadow for readability over vibrant bg */
+.route-card .route-name {
+  text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+}
+
+.route-card .route-meta {
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
 }
 
 .route-card-arrow {
@@ -536,10 +601,11 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
   opacity: 0;
   transition: opacity 0.2s ease, transform 0.2s ease;
   z-index: 1;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
 }
 
 .route-card:hover .route-card-arrow {
-  opacity: 0.7;
+  opacity: 0.8;
   transform: translateY(-50%) translateX(2px);
 }
 
@@ -552,50 +618,102 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
   display: block;
 }
 
-/* ── Dick Tracy wristwatch reveal ────────────────────────── */
-.tracy-overlay {
+/* ── Submarine periscope / sonar reveal ──────────────────── */
+.sub-overlay {
   position: fixed;
   inset: 0;
   z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 8, 20, 0.85);
   pointer-events: none;
 }
 
-.tracy-overlay.tracy-enter {
-  animation: tracyFadeIn 0.2s ease forwards;
+.sub-overlay.sub-enter {
+  animation: subFadeIn 0.25s ease forwards;
 }
 
-.tracy-overlay.tracy-exit {
-  animation: tracyFadeOut 0.2s ease forwards;
+.sub-overlay.sub-exit {
+  animation: subFadeOut 0.25s ease forwards;
 }
 
-.tracy-watch-frame {
-  width: 180px;
-  height: 180px;
+/* Comic burst lines behind porthole */
+.sub-burst-lines {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background:
+    repeating-conic-gradient(
+      rgba(59, 130, 246, 0.1) 0deg 10deg,
+      transparent 10deg 20deg
+    );
   border-radius: 50%;
-  border: 6px solid #d4a017;
+  animation: burstSpin 4s linear infinite;
+}
+
+/* Porthole frame */
+.sub-porthole {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  border: 8px solid #4a5568;
   box-shadow:
-    0 0 0 3px #1a1a1a,
-    0 0 0 6px #b8860b,
-    0 0 40px rgba(212, 160, 23, 0.4),
-    inset 0 0 20px rgba(0, 0, 0, 0.6);
+    0 0 0 4px #2d3748,
+    0 0 0 8px #4a5568,
+    inset 0 0 30px rgba(0, 0, 0, 0.8),
+    0 0 60px rgba(59, 130, 246, 0.3);
   position: relative;
   overflow: hidden;
-  background: #0a0a0a;
+  background: #0a1628;
 }
 
-.tracy-overlay.tracy-enter .tracy-watch-frame {
-  animation: tracyZoomIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+.sub-overlay.sub-enter .sub-porthole {
+  animation: subZoomIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
-.tracy-overlay.tracy-exit .tracy-watch-frame {
-  animation: tracyZoomOut 0.2s ease-in forwards;
+.sub-overlay.sub-exit .sub-porthole {
+  animation: subZoomOut 0.25s ease-in forwards;
 }
 
-.tracy-screen {
+/* Sonar sweep line */
+.sub-sonar-sweep {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(59, 130, 246, 0.3) 30deg,
+    transparent 60deg
+  );
+  animation: sonarSweep 1.5s linear infinite;
+  border-radius: 50%;
+}
+
+/* Sonar rings */
+.sub-sonar-ring {
+  position: absolute;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.ring-1 {
+  inset: 25%;
+}
+
+.ring-2 {
+  inset: 42%;
+}
+
+.ring-3 {
+  inset: 58%;
+}
+
+.sub-screen {
   width: 100%;
   height: 100%;
   border-radius: 50%;
@@ -606,105 +724,162 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
   justify-content: center;
 }
 
-.tracy-map-tile {
+.sub-map-tile {
   position: absolute;
   inset: -20%;
   width: 140%;
   height: 140%;
   object-fit: cover;
-  filter: contrast(1.3) brightness(0.7) saturate(0.3) sepia(0.4);
-  opacity: 0.7;
+  filter: brightness(1.1) saturate(1.5) contrast(1.2);
+  opacity: 0.85;
 }
 
-.tracy-screen .route-preview-svg {
+.sub-screen .route-preview-svg {
   position: relative;
   z-index: 2;
-  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.5));
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.6));
 }
 
-.tracy-crosshair {
+/* Crosshair */
+.sub-crosshair {
   position: absolute;
   inset: 0;
   z-index: 3;
   pointer-events: none;
 }
 
-.tracy-crosshair::before,
-.tracy-crosshair::after {
+.sub-crosshair::before,
+.sub-crosshair::after {
   content: '';
   position: absolute;
-  background: rgba(212, 160, 23, 0.5);
+  background: rgba(59, 130, 246, 0.5);
 }
 
-.tracy-crosshair::before {
+.sub-crosshair::before {
   top: 50%;
-  left: 10%;
-  right: 10%;
+  left: 8%;
+  right: 8%;
   height: 1px;
 }
 
-.tracy-crosshair::after {
+.sub-crosshair::after {
   left: 50%;
-  top: 10%;
-  bottom: 10%;
+  top: 8%;
+  bottom: 8%;
   width: 1px;
 }
 
-.tracy-coords {
+/* Depth gauge */
+.sub-depth {
   position: absolute;
-  bottom: 16px;
+  top: 14px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 4;
+  z-index: 7;
   font-family: 'Courier New', monospace;
   font-size: 0.55rem;
-  color: #d4a017;
-  text-shadow: 0 0 6px rgba(212, 160, 23, 0.8);
+  color: #63b3ed;
+  text-shadow: 0 0 8px rgba(99, 179, 237, 0.8);
+  white-space: nowrap;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* Coordinates */
+.sub-coords {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 7;
+  font-family: 'Courier New', monospace;
+  font-size: 0.5rem;
+  color: #48bb78;
+  text-shadow: 0 0 6px rgba(72, 187, 120, 0.8);
   white-space: nowrap;
   letter-spacing: 0.08em;
   font-weight: 700;
 }
 
-.tracy-bezel {
+/* Comic caption box */
+.sub-caption {
   position: absolute;
-  inset: -2px;
-  border-radius: 50%;
-  border: 2px solid rgba(212, 160, 23, 0.3);
-  pointer-events: none;
-  z-index: 5;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 8;
+  background: #fbbf24;
+  color: #1a1a1a;
+  font-family: 'Impact', 'Arial Black', sans-serif;
+  font-size: 0.6rem;
+  padding: 2px 10px;
+  border: 2px solid #1a1a1a;
+  border-radius: 2px;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  box-shadow: 2px 2px 0 rgba(0,0,0,0.5);
 }
 
-.tracy-flash {
+/* Porthole bolts */
+.sub-bolt {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: radial-gradient(circle, #718096 30%, #4a5568 70%);
+  border-radius: 50%;
+  border: 1px solid #2d3748;
+  z-index: 8;
+}
+
+.bolt-tl { top: 8px; left: 8px; }
+.bolt-tr { top: 8px; right: 8px; }
+.bolt-bl { bottom: 8px; left: 8px; }
+.bolt-br { bottom: 8px; right: 8px; }
+
+/* Ping flash */
+.sub-ping {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle, rgba(212, 160, 23, 0.3) 0%, transparent 70%);
-  animation: tracyFlash 0.3s ease-out;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.25) 0%, transparent 60%);
+  animation: subPing 0.4s ease-out;
   pointer-events: none;
 }
 
-@keyframes tracyFadeIn {
+@keyframes subFadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
 
-@keyframes tracyFadeOut {
+@keyframes subFadeOut {
   from { opacity: 1; }
   to   { opacity: 0; }
 }
 
-@keyframes tracyZoomIn {
-  from { transform: scale(0) rotate(-30deg); }
+@keyframes subZoomIn {
+  from { transform: scale(0) rotate(-15deg); }
   to   { transform: scale(1) rotate(0deg); }
 }
 
-@keyframes tracyZoomOut {
-  from { transform: scale(1) rotate(0deg); }
-  to   { transform: scale(0) rotate(20deg); }
+@keyframes subZoomOut {
+  from { transform: scale(1); }
+  to   { transform: scale(0) translateY(40px); }
 }
 
-@keyframes tracyFlash {
-  0%   { opacity: 1; }
-  100% { opacity: 0; }
+@keyframes sonarSweep {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes burstSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes subPing {
+  0%   { opacity: 1; transform: scale(0.8); }
+  100% { opacity: 0; transform: scale(1.2); }
 }
 
 /* ── Leaflet overrides ────────────────────────────────────── */

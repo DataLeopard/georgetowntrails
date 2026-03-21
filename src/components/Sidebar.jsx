@@ -3,7 +3,6 @@ import { getRoutesByPeriod } from '../data/routes';
 
 const VIEW_MODES = ['days', 'weeks', 'months'];
 
-/** Count routes from the last N days */
 function countRecentRoutes(routes, days) {
   const cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - days);
@@ -11,7 +10,6 @@ function countRecentRoutes(routes, days) {
   return routes.filter(r => r.date >= cutoffStr).length;
 }
 
-/** Get center point of a route's coordinates */
 function getRouteCenter(coords) {
   if (!coords || !coords.length) return [30.6627, -97.6779];
   const lat = coords.reduce((s, c) => s + c[0], 0) / coords.length;
@@ -19,7 +17,6 @@ function getRouteCenter(coords) {
   return [lat, lon];
 }
 
-/** Build OSM tile URL for a static map thumbnail */
 function getTileUrl(lat, lon, zoom) {
   const n = Math.pow(2, zoom);
   const x = Math.floor(((lon + 180) / 360) * n);
@@ -29,7 +26,6 @@ function getTileUrl(lat, lon, zoom) {
   return `https://tile.openstreetmap.org/${zoom}/${x}/${y}.png`;
 }
 
-/** Normalize route coords to fit in an SVG viewBox */
 function RoutePreviewPath({ coords, color, size = 60 }) {
   if (!coords || coords.length < 2) return null;
   const lats = coords.map(c => c[0]);
@@ -61,33 +57,64 @@ function RoutePreviewPath({ coords, color, size = 60 }) {
   );
 }
 
-/** Dick Tracy wristwatch circular reveal overlay */
-function TracyReveal({ route, onComplete }) {
+/** Submarine periscope / sonar reveal overlay */
+function SubReveal({ route, onComplete }) {
   const [phase, setPhase] = useState('enter');
   const center = getRouteCenter(route.coords);
   const tileUrl = getTileUrl(center[0], center[1], 15);
+  const depth = (Math.abs(center[0]) * 3.28).toFixed(0);
 
   useEffect(() => {
-    const t1 = setTimeout(() => setPhase('hold'), 200);
-    const t2 = setTimeout(() => setPhase('exit'), 500);
-    const t3 = setTimeout(() => onComplete(), 700);
+    const t1 = setTimeout(() => setPhase('hold'), 250);
+    const t2 = setTimeout(() => setPhase('exit'), 650);
+    const t3 = setTimeout(() => onComplete(), 900);
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, [onComplete]);
 
   return (
-    <div className={`tracy-overlay tracy-${phase}`}>
-      <div className="tracy-watch-frame">
-        <div className="tracy-screen">
-          <img src={tileUrl} alt="" className="tracy-map-tile" />
-          <RoutePreviewPath coords={route.coords} color={route.color} size={120} />
-          <div className="tracy-crosshair" />
-          <div className="tracy-coords">
-            {center[0].toFixed(4)}N {Math.abs(center[1]).toFixed(4)}W
-          </div>
+    <div className={`sub-overlay sub-${phase}`}>
+      {/* Comic panel burst lines behind */}
+      <div className="sub-burst-lines" />
+
+      <div className="sub-porthole">
+        {/* Sonar sweep */}
+        <div className="sub-sonar-sweep" />
+        {/* Sonar rings */}
+        <div className="sub-sonar-ring ring-1" />
+        <div className="sub-sonar-ring ring-2" />
+        <div className="sub-sonar-ring ring-3" />
+
+        <div className="sub-screen">
+          <img src={tileUrl} alt="" className="sub-map-tile" />
+          <RoutePreviewPath coords={route.coords} color={route.color} size={140} />
+          {/* Crosshair */}
+          <div className="sub-crosshair" />
         </div>
-        <div className="tracy-bezel" />
+
+        {/* Depth gauge */}
+        <div className="sub-depth">
+          DEPTH {depth}ft
+        </div>
+
+        {/* Coordinates */}
+        <div className="sub-coords">
+          {center[0].toFixed(4)}N {Math.abs(center[1]).toFixed(4)}W
+        </div>
+
+        {/* Route name comic caption */}
+        <div className="sub-caption">
+          <span className="sub-caption-text">{route.name}</span>
+        </div>
+
+        {/* Porthole bolts */}
+        <div className="sub-bolt bolt-tl" />
+        <div className="sub-bolt bolt-tr" />
+        <div className="sub-bolt bolt-bl" />
+        <div className="sub-bolt bolt-br" />
       </div>
-      <div className="tracy-flash" />
+
+      {/* Ping flash */}
+      <div className="sub-ping" />
     </div>
   );
 }
@@ -96,7 +123,7 @@ export default function Sidebar({ routes, activeRouteId, onRouteClick, isOpen, o
   const [viewMode, setViewMode] = useState('weeks');
   const [collapsed, setCollapsed] = useState({});
   const [searchTerm, setSearchTerm] = useState('');
-  const [tracyRoute, setTracyRoute] = useState(null);
+  const [revealRoute, setRevealRoute] = useState(null);
 
   const filteredRoutes = useMemo(() => {
     if (!searchTerm.trim()) return routes;
@@ -115,19 +142,18 @@ export default function Sidebar({ routes, activeRouteId, onRouteClick, isOpen, o
   const toggleGroup = (key) => setCollapsed(c => ({ ...c, [key]: !c[key] }));
 
   const handleRouteClick = useCallback((route) => {
-    setTracyRoute(route);
+    setRevealRoute(route);
   }, []);
 
-  const handleTracyComplete = useCallback(() => {
-    if (tracyRoute) {
-      onRouteClick(tracyRoute.id);
+  const handleRevealComplete = useCallback(() => {
+    if (revealRoute) {
+      onRouteClick(revealRoute.id);
     }
-    setTracyRoute(null);
-  }, [tracyRoute, onRouteClick]);
+    setRevealRoute(null);
+  }, [revealRoute, onRouteClick]);
 
   return (
     <>
-      {/* Toggle button */}
       <button
         className="sidebar-toggle"
         onClick={onToggle}
@@ -140,14 +166,14 @@ export default function Sidebar({ routes, activeRouteId, onRouteClick, isOpen, o
       </button>
 
       <aside id="trail-sidebar" className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
-        <div className="sidebar-header">
+        <div className="sidebar-header comic-header">
           <h1>Reactor</h1>
           <p className="sidebar-subtitle">Georgetown, TX Trails</p>
           <div className="sidebar-stats">
-            <div className="stat"><span className="stat-value">{totalRuns}</span><span className="stat-label">Routes</span></div>
-            <div className="stat"><span className="stat-value">{totalDist}</span><span className="stat-label">Miles</span></div>
-            <div className="stat"><span className="stat-value">{thisWeek}</span><span className="stat-label">This Wk</span></div>
-            <div className="stat"><span className="stat-value">{thisMonth}</span><span className="stat-label">30 Days</span></div>
+            <div className="stat comic-stat"><span className="stat-value">{totalRuns}</span><span className="stat-label">Routes</span></div>
+            <div className="stat comic-stat"><span className="stat-value">{totalDist}</span><span className="stat-label">Miles</span></div>
+            <div className="stat comic-stat"><span className="stat-value">{thisWeek}</span><span className="stat-label">This Wk</span></div>
+            <div className="stat comic-stat"><span className="stat-value">{thisMonth}</span><span className="stat-label">30 Days</span></div>
           </div>
           <div className="sidebar-search">
             <input
@@ -164,7 +190,6 @@ export default function Sidebar({ routes, activeRouteId, onRouteClick, isOpen, o
           </div>
         </div>
 
-        {/* View mode toggle */}
         <div className="view-tabs">
           {VIEW_MODES.map(mode => (
             <button
@@ -177,7 +202,6 @@ export default function Sidebar({ routes, activeRouteId, onRouteClick, isOpen, o
           ))}
         </div>
 
-        {/* Route groups */}
         <div className="route-groups">
           {filteredRoutes.length === 0 && (
             <div className="sidebar-empty-state">
@@ -192,7 +216,7 @@ export default function Sidebar({ routes, activeRouteId, onRouteClick, isOpen, o
             const isCollapsed = collapsed[groupKey];
             const groupDist = groupRoutes.reduce((s, r) => s + r.distance, 0).toFixed(1);
             return (
-              <div key={groupKey} className="route-group">
+              <div key={groupKey} className="route-group comic-panel">
                 <button
                   className="group-header"
                   onClick={() => toggleGroup(groupKey)}
@@ -220,9 +244,8 @@ export default function Sidebar({ routes, activeRouteId, onRouteClick, isOpen, o
         </div>
       </aside>
 
-      {/* Dick Tracy reveal overlay */}
-      {tracyRoute && (
-        <TracyReveal route={tracyRoute} onComplete={handleTracyComplete} />
+      {revealRoute && (
+        <SubReveal route={revealRoute} onComplete={handleRevealComplete} />
       )}
     </>
   );
@@ -231,31 +254,33 @@ export default function Sidebar({ routes, activeRouteId, onRouteClick, isOpen, o
 function RouteCard({ route, isActive, onClick }) {
   const center = getRouteCenter(route.coords);
   const tileUrl = getTileUrl(center[0], center[1], 14);
-  const cardRef = useRef(null);
 
   return (
     <button
-      ref={cardRef}
-      className={`route-card ${isActive ? 'active' : ''}`}
+      className={`route-card comic-card ${isActive ? 'active' : ''}`}
       onClick={onClick}
       aria-label={`${route.name}, ${route.distance} miles, ${route.duration}`}
       aria-pressed={isActive}
     >
-      {/* Map tile background */}
+      {/* Vibrant map tile background */}
       <div
         className="route-card-map-bg"
         style={{ backgroundImage: `url(${tileUrl})` }}
       />
 
-      {/* Route path overlay on background */}
+      {/* Halftone dot overlay for comic feel */}
+      <div className="route-card-halftone" />
+
+      {/* Route path overlay */}
       <div className="route-card-path-overlay">
-        <RoutePreviewPath coords={route.coords} color={route.color} size={60} />
+        <RoutePreviewPath coords={route.coords} color={route.color} size={70} />
       </div>
 
-      {/* Arrow indicator pointing toward map */}
+      {/* Arrow pointing to map */}
       <div className="route-card-arrow">
-        <svg width="16" height="24" viewBox="0 0 16 24">
-          <path d="M2 4 L14 12 L2 20" fill="none" stroke={route.color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        <svg width="20" height="28" viewBox="0 0 20 28">
+          <path d="M3 4 L17 14 L3 24" fill="none" stroke={route.color} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M3 4 L17 14 L3 24" fill="none" stroke="white" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" opacity="0.3" />
         </svg>
       </div>
 
