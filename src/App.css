@@ -618,268 +618,199 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
   display: block;
 }
 
-/* ── Submarine periscope / sonar reveal ──────────────────── */
-.sub-overlay {
+/* ── Blimp over Austin skyline reveal ────────────────────── */
+.blimp-overlay {
   position: fixed;
   inset: 0;
   z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 8, 20, 0.85);
   pointer-events: none;
-}
-
-.sub-overlay.sub-enter {
-  animation: subFadeIn 0.25s ease forwards;
-}
-
-.sub-overlay.sub-exit {
-  animation: subFadeOut 0.25s ease forwards;
-}
-
-/* Comic burst lines behind porthole */
-.sub-burst-lines {
-  position: absolute;
-  width: 400px;
-  height: 400px;
-  background:
-    repeating-conic-gradient(
-      rgba(59, 130, 246, 0.1) 0deg 10deg,
-      transparent 10deg 20deg
-    );
-  border-radius: 50%;
-  animation: burstSpin 4s linear infinite;
-}
-
-/* Porthole frame */
-.sub-porthole {
-  width: 220px;
-  height: 220px;
-  border-radius: 50%;
-  border: 8px solid #4a5568;
-  box-shadow:
-    0 0 0 4px #2d3748,
-    0 0 0 8px #4a5568,
-    inset 0 0 30px rgba(0, 0, 0, 0.8),
-    0 0 60px rgba(59, 130, 246, 0.3);
-  position: relative;
   overflow: hidden;
-  background: #0a1628;
 }
 
-.sub-overlay.sub-enter .sub-porthole {
-  animation: subZoomIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+.blimp-overlay.blimp-enter {
+  animation: blimpFadeIn 0.3s ease forwards;
 }
 
-.sub-overlay.sub-exit .sub-porthole {
-  animation: subZoomOut 0.25s ease-in forwards;
+.blimp-overlay.blimp-exit {
+  animation: blimpFadeOut 0.3s ease forwards;
 }
 
-/* Sonar sweep line */
-.sub-sonar-sweep {
+/* Gradient sky background */
+.blimp-sky {
   position: absolute;
   inset: 0;
-  z-index: 6;
-  pointer-events: none;
-  background: conic-gradient(
-    from 0deg,
-    transparent 0deg,
-    rgba(59, 130, 246, 0.3) 30deg,
-    transparent 60deg
+  background: linear-gradient(
+    180deg,
+    #0a0e27 0%,
+    #0f1b3d 25%,
+    #162550 45%,
+    #1e3a6e 65%,
+    #2a4a80 80%,
+    #1a2744 100%
   );
-  animation: sonarSweep 1.5s linear infinite;
-  border-radius: 50%;
 }
 
-/* Sonar rings */
-.sub-sonar-ring {
+/* Twinkling stars */
+.blimp-star {
   position: absolute;
-  border: 1px solid rgba(59, 130, 246, 0.25);
+  background: white;
   border-radius: 50%;
-  pointer-events: none;
-  z-index: 5;
+  animation: starTwinkle 2s ease-in-out infinite alternate;
 }
 
-.ring-1 {
-  inset: 25%;
-}
-
-.ring-2 {
-  inset: 42%;
-}
-
-.ring-3 {
-  inset: 58%;
-}
-
-.sub-screen {
+/* Austin skyline */
+.blimp-skyline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
   width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  overflow: hidden;
-  position: relative;
+  height: 40%;
+  z-index: 2;
+}
+
+/* Blimp airship */
+.blimp-ship {
+  position: absolute;
+  top: 12%;
+  z-index: 3;
+  width: 340px;
+  animation: blimpFly 1.5s ease-in-out forwards;
+}
+
+.blimp-svg {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 4px 20px rgba(59, 130, 246, 0.4));
+}
+
+.blimp-propeller {
+  transform-origin: center;
+  animation: propSpin 0.15s linear infinite;
+}
+
+/* Trailing banner */
+.blimp-banner {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border: 3px solid #92400e;
+  border-radius: 4px;
+  padding: 6px 20px;
+  box-shadow:
+    4px 4px 0 rgba(0,0,0,0.4),
+    0 0 20px rgba(251, 191, 36, 0.4);
+  animation: bannerPulse 0.8s ease-in-out infinite alternate;
+  white-space: nowrap;
+}
+
+.blimp-banner-text {
+  font-family: 'Impact', 'Arial Black', sans-serif;
+  font-size: 1rem;
+  color: #1a1a1a;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 0 rgba(255,255,255,0.3);
+}
+
+/* Route info card at bottom */
+.blimp-route-card {
+  position: absolute;
+  bottom: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  background: rgba(30, 41, 59, 0.95);
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  padding: 10px 24px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+  animation: cardSlideUp 0.4s 0.2s ease both;
 }
 
-.sub-map-tile {
-  position: absolute;
-  inset: -20%;
-  width: 140%;
-  height: 140%;
-  object-fit: cover;
-  filter: brightness(1.1) saturate(1.5) contrast(1.2);
-  opacity: 0.85;
+.blimp-route-color {
+  width: 6px;
+  height: 32px;
+  border-radius: 3px;
+  flex-shrink: 0;
 }
 
-.sub-screen .route-preview-svg {
-  position: relative;
-  z-index: 2;
-  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.6));
-}
-
-/* Crosshair */
-.sub-crosshair {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  pointer-events: none;
-}
-
-.sub-crosshair::before,
-.sub-crosshair::after {
-  content: '';
-  position: absolute;
-  background: rgba(59, 130, 246, 0.5);
-}
-
-.sub-crosshair::before {
-  top: 50%;
-  left: 8%;
-  right: 8%;
-  height: 1px;
-}
-
-.sub-crosshair::after {
-  left: 50%;
-  top: 8%;
-  bottom: 8%;
-  width: 1px;
-}
-
-/* Depth gauge */
-.sub-depth {
-  position: absolute;
-  top: 14px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 7;
-  font-family: 'Courier New', monospace;
-  font-size: 0.55rem;
-  color: #63b3ed;
-  text-shadow: 0 0 8px rgba(99, 179, 237, 0.8);
-  white-space: nowrap;
-  letter-spacing: 0.12em;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-/* Coordinates */
-.sub-coords {
-  position: absolute;
-  bottom: 14px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 7;
-  font-family: 'Courier New', monospace;
-  font-size: 0.5rem;
-  color: #48bb78;
-  text-shadow: 0 0 6px rgba(72, 187, 120, 0.8);
-  white-space: nowrap;
-  letter-spacing: 0.08em;
-  font-weight: 700;
-}
-
-/* Comic caption box */
-.sub-caption {
-  position: absolute;
-  bottom: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 8;
-  background: #fbbf24;
-  color: #1a1a1a;
+.blimp-route-name {
   font-family: 'Impact', 'Arial Black', sans-serif;
-  font-size: 0.6rem;
-  padding: 2px 10px;
-  border: 2px solid #1a1a1a;
-  border-radius: 2px;
-  white-space: nowrap;
+  font-size: 1rem;
+  color: var(--text);
+  letter-spacing: 1px;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  box-shadow: 2px 2px 0 rgba(0,0,0,0.5);
 }
 
-/* Porthole bolts */
-.sub-bolt {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background: radial-gradient(circle, #718096 30%, #4a5568 70%);
-  border-radius: 50%;
-  border: 1px solid #2d3748;
-  z-index: 8;
+.blimp-route-meta {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: 'Courier New', monospace;
 }
 
-.bolt-tl { top: 8px; left: 8px; }
-.bolt-tr { top: 8px; right: 8px; }
-.bolt-bl { bottom: 8px; left: 8px; }
-.bolt-br { bottom: 8px; right: 8px; }
-
-/* Ping flash */
-.sub-ping {
+/* Searchlight cone from blimp */
+.blimp-searchlight {
   position: absolute;
-  inset: 0;
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.25) 0%, transparent 60%);
-  animation: subPing 0.4s ease-out;
+  top: 28%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 60%;
+  background: linear-gradient(
+    180deg,
+    rgba(251, 191, 36, 0.15) 0%,
+    rgba(251, 191, 36, 0.03) 60%,
+    transparent 100%
+  );
+  clip-path: polygon(40% 0%, 60% 0%, 100% 100%, 0% 100%);
+  z-index: 2;
+  animation: searchlightSway 2s ease-in-out infinite alternate;
   pointer-events: none;
 }
 
-@keyframes subFadeIn {
+@keyframes blimpFadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
 
-@keyframes subFadeOut {
+@keyframes blimpFadeOut {
   from { opacity: 1; }
   to   { opacity: 0; }
 }
 
-@keyframes subZoomIn {
-  from { transform: scale(0) rotate(-15deg); }
-  to   { transform: scale(1) rotate(0deg); }
+@keyframes blimpFly {
+  from { left: -360px; opacity: 0; }
+  20%  { opacity: 1; }
+  to   { left: calc(50% - 170px); opacity: 1; }
 }
 
-@keyframes subZoomOut {
-  from { transform: scale(1); }
-  to   { transform: scale(0) translateY(40px); }
+@keyframes propSpin {
+  to { transform: rotate(360deg); }
 }
 
-@keyframes sonarSweep {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+@keyframes bannerPulse {
+  from { box-shadow: 4px 4px 0 rgba(0,0,0,0.4), 0 0 20px rgba(251, 191, 36, 0.3); }
+  to   { box-shadow: 4px 4px 0 rgba(0,0,0,0.4), 0 0 35px rgba(251, 191, 36, 0.6); }
 }
 
-@keyframes burstSpin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+@keyframes starTwinkle {
+  from { opacity: 0.3; }
+  to   { opacity: 1; }
 }
 
-@keyframes subPing {
-  0%   { opacity: 1; transform: scale(0.8); }
-  100% { opacity: 0; transform: scale(1.2); }
+@keyframes cardSlideUp {
+  from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+@keyframes searchlightSway {
+  from { transform: translateX(-50%) rotate(-3deg); }
+  to   { transform: translateX(-50%) rotate(3deg); }
 }
 
 /* ── Leaflet overrides ────────────────────────────────────── */
