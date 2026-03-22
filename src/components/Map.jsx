@@ -272,16 +272,60 @@ export default function Map({ routes, activeRouteId, onRouteClick }) {
     <div style={{ width: '100%', height: '100%', position: 'relative', display: 'flex' }}>
       {/* Detail map (left in split, full otherwise) */}
       <div
-        ref={detailMapRef}
-        className="detail-map-pane"
+        className={`detail-map-wrapper ${isSplit ? 'split-active' : ''}`}
         style={{
           flex: isSplit ? '1 1 60%' : '1 1 100%',
           height: '100%',
           transition: 'flex 0.3s ease',
+          position: 'relative',
+          overflow: 'hidden',
         }}
-        role="application"
-        aria-label="Trail map of Georgetown, Texas — detail view"
-      />
+      >
+        <div
+          ref={detailMapRef}
+          className="detail-map-pane"
+          style={{ width: '100%', height: '100%' }}
+          role="application"
+          aria-label="Trail map of Georgetown, Texas — detail view"
+        />
+
+        {/* Detail HUD overlay — only in split mode */}
+        {isSplit && (
+          <div className="detail-hud-overlay">
+            {/* Subtle vignette */}
+            <div className="detail-vignette" />
+
+            {/* Minimal crosshair */}
+            <svg className="detail-crosshair" viewBox="0 0 300 300" preserveAspectRatio="xMidYMid meet">
+              {/* Thin crosshair lines */}
+              <line x1="150" y1="0" x2="150" y2="120" stroke="rgba(0,255,65,0.2)" strokeWidth="0.5" />
+              <line x1="150" y1="180" x2="150" y2="300" stroke="rgba(0,255,65,0.2)" strokeWidth="0.5" />
+              <line x1="0" y1="150" x2="120" y2="150" stroke="rgba(0,255,65,0.2)" strokeWidth="0.5" />
+              <line x1="180" y1="150" x2="300" y2="150" stroke="rgba(0,255,65,0.2)" strokeWidth="0.5" />
+              {/* Small center circle */}
+              <circle cx="150" cy="150" r="40" fill="none" stroke="rgba(0,255,65,0.15)" strokeWidth="1" />
+              <circle cx="150" cy="150" r="3" fill="rgba(0,255,65,0.4)" />
+              {/* Corner brackets */}
+              <path d="M20,20 L20,50 M20,20 L50,20" fill="none" stroke="rgba(0,255,65,0.3)" strokeWidth="1.5" />
+              <path d="M280,20 L280,50 M280,20 L250,20" fill="none" stroke="rgba(0,255,65,0.3)" strokeWidth="1.5" />
+              <path d="M20,280 L20,250 M20,280 L50,280" fill="none" stroke="rgba(0,255,65,0.3)" strokeWidth="1.5" />
+              <path d="M280,280 L280,250 M280,280 L250,280" fill="none" stroke="rgba(0,255,65,0.3)" strokeWidth="1.5" />
+            </svg>
+
+            {/* HUD labels */}
+            <div className="detail-hud-top">
+              <span className="scope-label-blink">● LIVE</span>
+              <span className="scope-data">DETAIL VIEW</span>
+              <span className="scope-data">NVG ON</span>
+            </div>
+            <div className="detail-hud-bottom">
+              <span className="scope-data">GRID 4F-7A</span>
+              <span className="scope-label-pulse">◉ TRACKING</span>
+              <span className="scope-data">IR MODE</span>
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* Overview map (right panel, only when split) — submarine targeting scope */}
       {isSplit && (

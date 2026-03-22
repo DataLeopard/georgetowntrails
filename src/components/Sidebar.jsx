@@ -57,56 +57,127 @@ function RoutePreviewPath({ coords, color, size = 60 }) {
   );
 }
 
-/** Submarine torpedo targeting reveal */
+/** Night vision binocular targeting reveal with soldier */
 function TargetLockReveal({ route, onComplete }) {
   const [phase, setPhase] = useState('enter');
-  const starsRef = useRef(
-    Array.from({ length: 12 }, () => ({
-      x: 5 + Math.random() * 90,
-      y: 5 + Math.random() * 30,
-      d: Math.random() * 2,
-      s: 1 + Math.random() * 2,
-    }))
-  );
 
   useEffect(() => {
-    const t1 = setTimeout(() => setPhase('lock'), 500);
-    const t2 = setTimeout(() => setPhase('exit'), 2400);
-    const t3 = setTimeout(() => onComplete(), 2800);
-    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
+    const t1 = setTimeout(() => setPhase('zoom'), 300);
+    const t2 = setTimeout(() => setPhase('lock'), 900);
+    const t3 = setTimeout(() => setPhase('flash'), 2600);
+    const t4 = setTimeout(() => setPhase('exit'), 2800);
+    const t5 = setTimeout(() => onComplete(), 3200);
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); clearTimeout(t5); };
   }, [onComplete]);
 
   return (
     <div className={`torpedo-overlay torpedo-${phase}`}>
-      {/* Deep ocean / night-vision background */}
+      {/* Deep green night-vision background */}
       <div className="torpedo-bg" />
+
+      {/* Binocular mask — two circles with bridge */}
+      <div className="bino-mask" />
+
+      {/* CRT scanlines across entire screen */}
+      <div className="crt-lines" />
 
       {/* Static noise grain */}
       <div className="torpedo-noise" />
+
+      {/* White flash on lock */}
+      <div className="nvg-flash" />
 
       {/* Sonar ping rings */}
       <div className="sonar-ping sonar-ping-1" />
       <div className="sonar-ping sonar-ping-2" />
       <div className="sonar-ping sonar-ping-3" />
 
-      {/* Main targeting scope SVG */}
+      {/* Soldier silhouettes walking across bottom */}
+      <svg className="soldier-layer" viewBox="0 0 1000 200" preserveAspectRatio="xMidYMax slice">
+        {/* Soldier 1 — crouching with rifle, moving left to right */}
+        <g className="soldier soldier-1">
+          {/* Body */}
+          <circle cx="50" cy="120" r="10" fill="rgba(0,255,65,0.25)" />
+          {/* Torso leaning forward */}
+          <line x1="50" y1="130" x2="45" y2="155" stroke="rgba(0,255,65,0.25)" strokeWidth="4" strokeLinecap="round" />
+          {/* Legs */}
+          <line x1="45" y1="155" x2="35" y2="180" stroke="rgba(0,255,65,0.25)" strokeWidth="3" strokeLinecap="round" />
+          <line x1="45" y1="155" x2="55" y2="178" stroke="rgba(0,255,65,0.25)" strokeWidth="3" strokeLinecap="round" />
+          {/* Arms + rifle */}
+          <line x1="48" y1="135" x2="70" y2="128" stroke="rgba(0,255,65,0.25)" strokeWidth="2.5" strokeLinecap="round" />
+          <line x1="70" y1="128" x2="95" y2="122" stroke="rgba(0,255,65,0.3)" strokeWidth="2" strokeLinecap="round" />
+          {/* Helmet */}
+          <ellipse cx="50" cy="116" rx="12" ry="7" fill="rgba(0,255,65,0.2)" />
+        </g>
+
+        {/* Soldier 2 — standing with binoculars, moving right */}
+        <g className="soldier soldier-2">
+          <circle cx="50" cy="115" r="10" fill="rgba(0,255,65,0.2)" />
+          <line x1="50" y1="125" x2="50" y2="160" stroke="rgba(0,255,65,0.2)" strokeWidth="4" strokeLinecap="round" />
+          <line x1="50" y1="160" x2="40" y2="185" stroke="rgba(0,255,65,0.2)" strokeWidth="3" strokeLinecap="round" />
+          <line x1="50" y1="160" x2="60" y2="185" stroke="rgba(0,255,65,0.2)" strokeWidth="3" strokeLinecap="round" />
+          {/* Arms holding binoculars up */}
+          <line x1="48" y1="130" x2="45" y2="118" stroke="rgba(0,255,65,0.2)" strokeWidth="2.5" strokeLinecap="round" />
+          <line x1="52" y1="130" x2="55" y2="118" stroke="rgba(0,255,65,0.2)" strokeWidth="2.5" strokeLinecap="round" />
+          <rect x="42" y="110" width="16" height="8" rx="2" fill="rgba(0,255,65,0.15)" />
+          <ellipse cx="50" cy="112" rx="13" ry="6" fill="rgba(0,255,65,0.15)" />
+        </g>
+
+        {/* Soldier 3 — prone/crawling */}
+        <g className="soldier soldier-3">
+          <circle cx="50" cy="170" r="8" fill="rgba(0,255,65,0.18)" />
+          <line x1="50" y1="175" x2="85" y2="178" stroke="rgba(0,255,65,0.18)" strokeWidth="5" strokeLinecap="round" />
+          <line x1="85" y1="178" x2="95" y2="185" stroke="rgba(0,255,65,0.18)" strokeWidth="3" strokeLinecap="round" />
+          <line x1="85" y1="178" x2="100" y2="182" stroke="rgba(0,255,65,0.18)" strokeWidth="3" strokeLinecap="round" />
+          <line x1="48" y1="168" x2="30" y2="165" stroke="rgba(0,255,65,0.2)" strokeWidth="2" strokeLinecap="round" />
+          <line x1="30" y1="165" x2="15" y2="163" stroke="rgba(0,255,65,0.22)" strokeWidth="1.5" strokeLinecap="round" />
+        </g>
+      </svg>
+
+      {/* Heartbeat line at bottom */}
+      <div className="heartbeat-container">
+        <svg className="heartbeat-svg" viewBox="0 0 300 40" preserveAspectRatio="none">
+          <polyline
+            points="0,20 30,20 40,20 45,5 50,35 55,15 60,25 65,20 100,20 130,20 140,20 145,5 150,35 155,15 160,25 165,20 200,20 230,20 240,20 245,5 250,35 255,15 260,25 265,20 300,20"
+            fill="none"
+            stroke="rgba(0,255,65,0.5)"
+            strokeWidth="1.5"
+            className="heartbeat-line"
+          />
+        </svg>
+      </div>
+
+      {/* Main targeting scope SVG — binocular zoom-in */}
       <svg className="torpedo-scope" viewBox="0 0 500 500" preserveAspectRatio="xMidYMid meet">
         {/* Outer rings */}
-        <circle cx="250" cy="250" r="230" fill="none" stroke="rgba(0,255,65,0.2)" strokeWidth="2" />
-        <circle cx="250" cy="250" r="200" fill="none" stroke="rgba(0,255,65,0.15)" strokeWidth="1" strokeDasharray="12 6" className="torpedo-ring-spin" />
-        <circle cx="250" cy="250" r="170" fill="none" stroke="rgba(0,255,65,0.3)" strokeWidth="1.5" />
-        <circle cx="250" cy="250" r="120" fill="none" stroke="rgba(0,255,65,0.2)" strokeWidth="1" strokeDasharray="4 8" className="torpedo-ring-spin-rev" />
-        <circle cx="250" cy="250" r="70" fill="none" stroke="rgba(0,255,65,0.35)" strokeWidth="2" />
-        <circle cx="250" cy="250" r="30" fill="none" stroke="rgba(255,60,60,0.6)" strokeWidth="2" className="torpedo-bullseye" />
+        <circle cx="250" cy="250" r="230" fill="none" stroke="rgba(0,255,65,0.3)" strokeWidth="2.5" />
+        <circle cx="250" cy="250" r="210" fill="none" stroke="rgba(0,255,65,0.1)" strokeWidth="1" strokeDasharray="3 3" />
+        <circle cx="250" cy="250" r="200" fill="none" stroke="rgba(0,255,65,0.2)" strokeWidth="1.5" strokeDasharray="12 6" className="torpedo-ring-spin" />
+        <circle cx="250" cy="250" r="170" fill="none" stroke="rgba(0,255,65,0.35)" strokeWidth="2" />
+        <circle cx="250" cy="250" r="140" fill="none" stroke="rgba(0,255,65,0.1)" strokeWidth="1" strokeDasharray="6 10" className="torpedo-ring-spin-rev" />
+        <circle cx="250" cy="250" r="120" fill="none" stroke="rgba(0,255,65,0.25)" strokeWidth="1.5" strokeDasharray="4 8" />
+        <circle cx="250" cy="250" r="90" fill="none" stroke="rgba(0,255,65,0.15)" strokeWidth="1" />
+        <circle cx="250" cy="250" r="70" fill="none" stroke="rgba(0,255,65,0.4)" strokeWidth="2" />
+        <circle cx="250" cy="250" r="30" fill="none" stroke="rgba(255,60,60,0.7)" strokeWidth="2.5" className="torpedo-bullseye" />
 
         {/* Kill dot */}
         <circle cx="250" cy="250" r="5" fill="rgba(255,60,60,0.9)" className="torpedo-dot-pulse" />
 
-        {/* Main crosshairs */}
-        <line x1="250" y1="10" x2="250" y2="180" stroke="rgba(0,255,65,0.5)" strokeWidth="1.5" />
-        <line x1="250" y1="320" x2="250" y2="490" stroke="rgba(0,255,65,0.5)" strokeWidth="1.5" />
-        <line x1="10" y1="250" x2="180" y2="250" stroke="rgba(0,255,65,0.5)" strokeWidth="1.5" />
-        <line x1="320" y1="250" x2="490" y2="250" stroke="rgba(0,255,65,0.5)" strokeWidth="1.5" />
+        {/* Main crosshairs — thicker */}
+        <line x1="250" y1="10" x2="250" y2="180" stroke="rgba(0,255,65,0.6)" strokeWidth="2" />
+        <line x1="250" y1="320" x2="250" y2="490" stroke="rgba(0,255,65,0.6)" strokeWidth="2" />
+        <line x1="10" y1="250" x2="180" y2="250" stroke="rgba(0,255,65,0.6)" strokeWidth="2" />
+        <line x1="320" y1="250" x2="490" y2="250" stroke="rgba(0,255,65,0.6)" strokeWidth="2" />
+
+        {/* Mil-dot range marks on crosshairs */}
+        {[60, 90, 120, 150].map(d => (
+          <g key={d}>
+            <line x1={245} y1={250-d} x2={255} y2={250-d} stroke="rgba(0,255,65,0.4)" strokeWidth="1" />
+            <line x1={245} y1={250+d} x2={255} y2={250+d} stroke="rgba(0,255,65,0.4)" strokeWidth="1" />
+            <line x1={250-d} y1={245} x2={250-d} y2={255} stroke="rgba(0,255,65,0.4)" strokeWidth="1" />
+            <line x1={250+d} y1={245} x2={250+d} y2={255} stroke="rgba(0,255,65,0.4)" strokeWidth="1" />
+          </g>
+        ))}
 
         {/* Diagonal guide lines */}
         <line x1="80" y1="80" x2="180" y2="180" stroke="rgba(0,255,65,0.15)" strokeWidth="1" />
@@ -114,45 +185,68 @@ function TargetLockReveal({ route, onComplete }) {
         <line x1="80" y1="420" x2="180" y2="320" stroke="rgba(0,255,65,0.15)" strokeWidth="1" />
         <line x1="420" y1="420" x2="320" y2="320" stroke="rgba(0,255,65,0.15)" strokeWidth="1" />
 
-        {/* Range ticks around outer ring */}
-        {Array.from({ length: 36 }, (_, i) => {
-          const angle = (i * 10 * Math.PI) / 180;
-          const r1 = i % 3 === 0 ? 215 : 222;
+        {/* Range ticks — 72 of them */}
+        {Array.from({ length: 72 }, (_, i) => {
+          const angle = (i * 5 * Math.PI) / 180;
+          const major = i % 6 === 0;
+          const r1 = major ? 210 : 220;
           const r2 = 235;
           return (
             <line key={i}
               x1={250 + r1 * Math.cos(angle)} y1={250 + r1 * Math.sin(angle)}
               x2={250 + r2 * Math.cos(angle)} y2={250 + r2 * Math.sin(angle)}
-              stroke={i % 9 === 0 ? 'rgba(255,60,60,0.6)' : 'rgba(0,255,65,0.4)'}
-              strokeWidth={i % 3 === 0 ? 2 : 1}
+              stroke={i % 18 === 0 ? 'rgba(255,60,60,0.7)' : major ? 'rgba(0,255,65,0.5)' : 'rgba(0,255,65,0.2)'}
+              strokeWidth={major ? 2 : 0.8}
             />
           );
         })}
 
         {/* Corner bracket frames */}
-        <path d="M30,30 L30,90 M30,30 L90,30" fill="none" stroke="rgba(0,255,65,0.5)" strokeWidth="2.5" />
-        <path d="M470,30 L470,90 M470,30 L410,30" fill="none" stroke="rgba(0,255,65,0.5)" strokeWidth="2.5" />
-        <path d="M30,470 L30,410 M30,470 L90,470" fill="none" stroke="rgba(0,255,65,0.5)" strokeWidth="2.5" />
-        <path d="M470,470 L470,410 M470,470 L410,470" fill="none" stroke="rgba(0,255,65,0.5)" strokeWidth="2.5" />
+        <path d="M25,25 L25,95 M25,25 L95,25" fill="none" stroke="rgba(0,255,65,0.6)" strokeWidth="3" />
+        <path d="M475,25 L475,95 M475,25 L405,25" fill="none" stroke="rgba(0,255,65,0.6)" strokeWidth="3" />
+        <path d="M25,475 L25,405 M25,475 L95,475" fill="none" stroke="rgba(0,255,65,0.6)" strokeWidth="3" />
+        <path d="M475,475 L475,405 M475,475 L405,475" fill="none" stroke="rgba(0,255,65,0.6)" strokeWidth="3" />
 
-        {/* Target diamond */}
-        <polygon points="250,200 300,250 250,300 200,250" fill="none" stroke="rgba(255,60,60,0.4)" strokeWidth="1.5" className="torpedo-diamond-pulse" />
+        {/* Target diamond pulsing */}
+        <polygon points="250,195 305,250 250,305 195,250" fill="none" stroke="rgba(255,60,60,0.5)" strokeWidth="2" className="torpedo-diamond-pulse" />
+
+        {/* Compass rose */}
+        <text x="245" y="48" fill="rgba(0,255,65,0.5)" fontSize="10" fontFamily="monospace" fontWeight="bold">N</text>
+        <text x="245" y="478" fill="rgba(0,255,65,0.4)" fontSize="10" fontFamily="monospace" fontWeight="bold">S</text>
+        <text x="468" y="254" fill="rgba(0,255,65,0.4)" fontSize="10" fontFamily="monospace" fontWeight="bold">E</text>
+        <text x="22" y="254" fill="rgba(0,255,65,0.4)" fontSize="10" fontFamily="monospace" fontWeight="bold">W</text>
 
         {/* HUD text */}
-        <text x="40" y="25" fill="rgba(0,255,65,0.7)" fontSize="11" fontFamily="'Courier New', monospace" fontWeight="bold">TORPEDO BAY 01</text>
-        <text x="350" y="25" fill="rgba(255,60,60,0.8)" fontSize="11" fontFamily="'Courier New', monospace" fontWeight="bold" className="torpedo-text-blink">● ARMED</text>
-        <text x="40" y="490" fill="rgba(0,255,65,0.6)" fontSize="10" fontFamily="'Courier New', monospace">BRG 247° · SPD 12kts</text>
-        <text x="340" y="490" fill="rgba(0,255,65,0.6)" fontSize="10" fontFamily="'Courier New', monospace">DEPTH 200ft</text>
+        <text x="35" y="22" fill="rgba(0,255,65,0.8)" fontSize="12" fontFamily="'Courier New', monospace" fontWeight="bold">NVG SCOPE MK-IV</text>
+        <text x="355" y="22" fill="rgba(255,60,60,0.9)" fontSize="12" fontFamily="'Courier New', monospace" fontWeight="bold" className="torpedo-text-blink">● ARMED</text>
+        <text x="35" y="492" fill="rgba(0,255,65,0.6)" fontSize="10" fontFamily="'Courier New', monospace">BRG 247° · SPD 12kts · WIND 8mph NE</text>
+        <text x="355" y="492" fill="rgba(0,255,65,0.6)" fontSize="10" fontFamily="'Courier New', monospace">ALT 200ft</text>
       </svg>
 
-      {/* Scan sweep */}
+      {/* Radar sweep */}
       <div className="torpedo-sweep" />
 
       {/* HUD data bars */}
       <div className="torpedo-hud-top">
         <span className="torpedo-rec">● REC</span>
-        <span className="torpedo-label">SUBMARINE TACTICAL DISPLAY</span>
-        <span className="torpedo-data">MARK {route.id}</span>
+        <span className="torpedo-label">NIGHT VISION · BINOCULAR FEED</span>
+        <span className="torpedo-data">TGT {route.id}</span>
+      </div>
+
+      {/* Side HUD panels */}
+      <div className="nvg-side-hud nvg-side-left">
+        <div className="nvg-readout">PWR<br/>87%</div>
+        <div className="nvg-bar-v"><div className="nvg-bar-fill" style={{height:'87%'}} /></div>
+        <div className="nvg-readout">GAIN<br/>+4.2</div>
+        <div className="nvg-bar-v"><div className="nvg-bar-fill" style={{height:'65%'}} /></div>
+        <div className="nvg-readout">IR</div>
+      </div>
+      <div className="nvg-side-hud nvg-side-right">
+        <div className="nvg-readout">RNG<br/>1.4mi</div>
+        <div className="nvg-bar-v"><div className="nvg-bar-fill" style={{height:'45%'}} /></div>
+        <div className="nvg-readout">MAG<br/>12x</div>
+        <div className="nvg-bar-v"><div className="nvg-bar-fill" style={{height:'72%'}} /></div>
+        <div className="nvg-readout">BAT</div>
       </div>
 
       {/* Route target card */}
@@ -171,6 +265,9 @@ function TargetLockReveal({ route, onComplete }) {
             <span>{route.duration}</span>
             <span>·</span>
             <span>{route.type.toUpperCase()}</span>
+          </div>
+          <div className="torpedo-card-coords">
+            {getRouteCenter(route.coords)[0].toFixed(4)}°N {Math.abs(getRouteCenter(route.coords)[1]).toFixed(4)}°W
           </div>
         </div>
       </div>

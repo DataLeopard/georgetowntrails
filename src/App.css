@@ -791,6 +791,61 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
   display: block;
 }
 
+/* ── Detail map HUD (left panel in split) ───────────────── */
+.detail-map-wrapper.split-active .leaflet-container {
+  filter: hue-rotate(80deg) saturate(0.5) brightness(0.75) contrast(1.2);
+}
+
+.detail-hud-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 600;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.detail-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 40%,
+    rgba(0,0,0,0.25) 60%,
+    rgba(0,0,0,0.5) 80%,
+    rgba(0,0,0,0.7) 100%
+  );
+}
+
+.detail-crosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80%;
+  height: 80%;
+  transform: translate(-50%, -50%);
+  opacity: 0.7;
+}
+
+.detail-hud-top,
+.detail-hud-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 12px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: rgba(0,255,65,0.6);
+  text-shadow: 0 0 4px rgba(0,255,65,0.3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.detail-hud-top { top: 0; }
+.detail-hud-bottom { bottom: 0; }
+
 /* ── Submarine Torpedo Targeting Reveal ──────────────────── */
 .torpedo-overlay {
   position: fixed;
@@ -800,27 +855,120 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
   overflow: hidden;
 }
 
+/* Phase animations */
 .torpedo-overlay.torpedo-enter {
-  animation: torpedoFadeIn 0.4s ease forwards;
-}
-.torpedo-overlay.torpedo-lock .torpedo-bullseye,
-.torpedo-overlay.torpedo-lock .torpedo-dot-pulse {
-  animation: torpedoLockPulse 0.3s ease 3;
-}
-.torpedo-overlay.torpedo-exit {
-  animation: torpedoFadeOut 0.35s ease forwards;
+  animation: torpedoFadeIn 0.3s ease forwards;
 }
 
-/* Deep ocean / night vision BG */
+.torpedo-overlay.torpedo-zoom {
+  animation: none;
+  opacity: 1;
+}
+
+.torpedo-overlay.torpedo-zoom .torpedo-scope {
+  animation: binoZoomIn 0.6s ease forwards;
+}
+
+.torpedo-overlay.torpedo-lock .torpedo-bullseye,
+.torpedo-overlay.torpedo-lock .torpedo-dot-pulse {
+  animation: torpedoLockPulse 0.3s ease 4;
+}
+
+.torpedo-overlay.torpedo-flash .nvg-flash {
+  animation: nvgFlashBang 0.2s ease;
+}
+
+.torpedo-overlay.torpedo-exit {
+  animation: torpedoFadeOut 0.4s ease forwards;
+}
+
+/* Deep night-vision BG */
 .torpedo-bg {
   position: absolute;
   inset: 0;
   background: radial-gradient(
     ellipse at center,
-    #0a1a0a 0%,
-    #060e06 40%,
-    #020502 100%
+    #0d1f0d 0%,
+    #071207 30%,
+    #030903 60%,
+    #010301 100%
   );
+}
+
+/* Binocular mask — figure-eight shape */
+.bino-mask {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 42% 70% at 32% 50%, transparent 95%, rgba(0,0,0,0.95) 100%),
+    radial-gradient(ellipse 42% 70% at 68% 50%, transparent 95%, rgba(0,0,0,0.95) 100%);
+  mask-image:
+    radial-gradient(ellipse 42% 70% at 32% 50%, black 95%, transparent 100%),
+    radial-gradient(ellipse 42% 70% at 68% 50%, black 95%, transparent 100%);
+  mask-composite: add;
+  -webkit-mask-image:
+    radial-gradient(ellipse 42% 70% at 32% 50%, black 95%, transparent 100%),
+    radial-gradient(ellipse 42% 70% at 68% 50%, black 95%, transparent 100%);
+  -webkit-mask-composite: source-over;
+}
+
+/* Actually, use an inverse approach: black everywhere except two circles */
+.bino-mask {
+  background: rgba(0,0,0,0.97);
+  mask-image:
+    radial-gradient(ellipse 40% 65% at 33% 50%, transparent 92%, black 100%),
+    radial-gradient(ellipse 40% 65% at 67% 50%, transparent 92%, black 100%);
+  mask-composite: subtract;
+  -webkit-mask-image:
+    radial-gradient(ellipse 40% 65% at 33% 50%, transparent 92%, black 100%),
+    radial-gradient(ellipse 40% 65% at 67% 50%, transparent 92%, black 100%);
+  -webkit-mask-composite: destination-out;
+}
+
+/* CRT horizontal scanlines */
+.crt-lines {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.15) 2px,
+    rgba(0,0,0,0.15) 4px
+  );
+  animation: crtFlicker 0.08s infinite;
+}
+
+@keyframes crtFlicker {
+  0%   { opacity: 0.8; }
+  50%  { opacity: 1; }
+  100% { opacity: 0.85; }
+}
+
+/* NVG white flash on target lock */
+.nvg-flash {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,255,65,0.15);
+  z-index: 18;
+  pointer-events: none;
+  opacity: 0;
+}
+
+@keyframes nvgFlashBang {
+  0%   { opacity: 0; background: rgba(255,255,255,0.8); }
+  30%  { opacity: 1; background: rgba(0,255,65,0.4); }
+  100% { opacity: 0; background: rgba(0,255,65,0); }
+}
+
+/* Binocular zoom-in animation */
+@keyframes binoZoomIn {
+  from { transform: translate(-50%, -50%) scale(1.6); opacity: 0.3; }
+  to   { transform: translate(-50%, -50%) scale(1); opacity: 1; }
 }
 
 /* Static noise grain overlay */
@@ -1041,6 +1189,127 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
   font-size: 0.7rem;
   color: rgba(0,255,65,0.6);
   letter-spacing: 0.1em;
+}
+
+.torpedo-card-coords {
+  font-family: 'Courier New', monospace;
+  font-size: 0.6rem;
+  color: rgba(0,255,65,0.4);
+  letter-spacing: 0.08em;
+}
+
+/* ── Soldier silhouettes ─────────────────────────────────── */
+.soldier-layer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 25%;
+  z-index: 8;
+  pointer-events: none;
+}
+
+.soldier-1 {
+  animation: soldierWalk1 4s linear infinite;
+}
+
+.soldier-2 {
+  animation: soldierWalk2 6s linear infinite;
+}
+
+.soldier-3 {
+  animation: soldierCrawl 5s linear infinite;
+}
+
+@keyframes soldierWalk1 {
+  from { transform: translateX(-100px); }
+  to   { transform: translateX(1100px); }
+}
+
+@keyframes soldierWalk2 {
+  from { transform: translateX(1100px); }
+  to   { transform: translateX(-100px); }
+}
+
+@keyframes soldierCrawl {
+  from { transform: translateX(-150px); }
+  to   { transform: translateX(1150px); }
+}
+
+/* ── Heartbeat monitor ───────────────────────────────────── */
+.heartbeat-container {
+  position: absolute;
+  bottom: 6%;
+  left: 5%;
+  width: 25%;
+  height: 30px;
+  z-index: 12;
+  opacity: 0.6;
+}
+
+.heartbeat-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.heartbeat-line {
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+  animation: heartbeatDraw 2s linear infinite;
+}
+
+@keyframes heartbeatDraw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* ── NVG Side HUD panels ────────────────────────────────── */
+.nvg-side-hud {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 12;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 4px;
+  background: rgba(0,10,0,0.5);
+  border: 1px solid rgba(0,255,65,0.2);
+  border-radius: 4px;
+}
+
+.nvg-side-left { left: 10px; }
+.nvg-side-right { right: 10px; }
+
+.nvg-readout {
+  font-family: 'Courier New', monospace;
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: rgba(0,255,65,0.6);
+  text-align: center;
+  text-shadow: 0 0 4px rgba(0,255,65,0.3);
+  letter-spacing: 0.1em;
+  line-height: 1.2;
+}
+
+.nvg-bar-v {
+  width: 6px;
+  height: 30px;
+  background: rgba(0,255,65,0.1);
+  border: 1px solid rgba(0,255,65,0.2);
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.nvg-bar-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(0deg, rgba(0,255,65,0.7), rgba(0,255,65,0.3));
+  border-radius: 1px;
+  transition: height 0.5s ease;
 }
 
 /* Animations */
