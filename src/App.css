@@ -445,41 +445,214 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
 
 .search-clear-link:hover { color: var(--text); }
 
-/* ── Split map panels ────────────────────────────────────── */
-.overview-pane {
+/* ── Split map panels — Military Scope ───────────────────── */
+.overview-pane.scope-panel {
   flex: 0 0 40%;
   height: 100%;
   position: relative;
-  border-left: 2px solid var(--accent);
+  overflow: hidden;
 }
 
-.overview-label {
+/* Green night-vision tint on overview map tiles */
+.scope-panel .leaflet-container {
+  filter: hue-rotate(80deg) saturate(0.6) brightness(0.7) contrast(1.3);
+}
+
+/* Full overlay container */
+.scope-overlay {
   position: absolute;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
+  inset: 0;
   z-index: 600;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--text-muted);
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Circular dark vignette */
+.scope-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    transparent 30%,
+    rgba(0,0,0,0.3) 50%,
+    rgba(0,0,0,0.6) 65%,
+    rgba(0,0,0,0.85) 80%,
+    rgba(0,0,0,0.95) 100%
+  );
+}
+
+/* Crosshair SVG centered */
+.scope-crosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 90%;
+  height: 90%;
+  transform: translate(-50%, -50%);
+}
+
+/* Scanning line effect */
+.scope-scanline {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(0,255,65,0.3), transparent);
+  animation: scopeScan 3s linear infinite;
+  box-shadow: 0 0 8px rgba(0,255,65,0.2);
+}
+
+@keyframes scopeScan {
+  0%   { top: 5%; opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { top: 95%; opacity: 0; }
+}
+
+/* HUD text elements */
+.scope-hud-top,
+.scope-hud-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 14px;
+  font-family: 'Courier New', 'Consolas', monospace;
   font-size: 0.65rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
-  padding: 4px 12px;
-  border-radius: 99px;
-  pointer-events: none;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  color: rgba(0,255,65,0.7);
+  text-shadow: 0 0 6px rgba(0,255,65,0.4);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
-.split-divider {
+.scope-hud-top { top: 0; }
+.scope-hud-bottom { bottom: 0; }
+
+.scope-hud-left,
+.scope-hud-right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: rgba(0,255,65,0.6);
+  text-shadow: 0 0 4px rgba(0,255,65,0.3);
+}
+
+.scope-hud-left { left: 10px; }
+.scope-hud-right { right: 10px; }
+
+.scope-data {
+  color: rgba(0,255,65,0.7);
+  letter-spacing: 0.08em;
+}
+
+.scope-label-blink {
+  color: rgba(255,60,60,0.9);
+  animation: hudBlink 1s step-end infinite;
+}
+
+.scope-label-pulse {
+  color: rgba(255,200,60,0.9);
+  animation: hudPulse 1.5s ease-in-out infinite;
+  text-shadow: 0 0 8px rgba(255,200,60,0.5);
+}
+
+@keyframes hudBlink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@keyframes hudPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.scope-rangebar {
+  width: 3px;
+  height: 40px;
+  background: linear-gradient(180deg, rgba(0,255,65,0.6), rgba(0,255,65,0.1));
+  border-radius: 2px;
+  margin-top: 4px;
+}
+
+/* ── Military split divider ──────────────────────────────── */
+.split-divider-military {
   position: absolute;
   top: 0;
   left: 60%;
-  width: 2px;
+  width: 6px;
   height: 100%;
-  background: var(--accent);
-  z-index: 500;
+  z-index: 700;
   pointer-events: none;
+  transform: translateX(-50%);
+}
+
+.divider-line {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    rgba(0,255,65,0.1),
+    rgba(0,255,65,0.6) 20%,
+    rgba(0,255,65,0.8) 50%,
+    rgba(0,255,65,0.6) 80%,
+    rgba(0,255,65,0.1)
+  );
+}
+
+.divider-glow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 100%;
+  background: linear-gradient(180deg,
+    transparent,
+    rgba(0,255,65,0.08) 20%,
+    rgba(0,255,65,0.12) 50%,
+    rgba(0,255,65,0.08) 80%,
+    transparent
+  );
+}
+
+.divider-notch {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 3px;
+  background: rgba(0,255,65,0.8);
+  box-shadow: 0 0 8px rgba(0,255,65,0.5);
+}
+
+.divider-notch-top { top: 20%; }
+.divider-notch-mid { top: 50%; }
+.divider-notch-bot { top: 80%; }
+
+.divider-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-90deg);
+  white-space: nowrap;
+  font-family: 'Courier New', monospace;
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: rgba(0,255,65,0.6);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-shadow: 0 0 6px rgba(0,255,65,0.4);
+  background: rgba(0,0,0,0.8);
+  padding: 2px 8px;
+  border: 1px solid rgba(0,255,65,0.3);
 }
 
 /* ── Comic book styling ──────────────────────────────────── */
@@ -618,8 +791,8 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
   display: block;
 }
 
-/* ── Blimp over Austin skyline reveal ────────────────────── */
-.blimp-overlay {
+/* ── Submarine Torpedo Targeting Reveal ──────────────────── */
+.torpedo-overlay {
   position: fixed;
   inset: 0;
   z-index: 9999;
@@ -627,190 +800,268 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
   overflow: hidden;
 }
 
-.blimp-overlay.blimp-enter {
-  animation: blimpFadeIn 0.3s ease forwards;
+.torpedo-overlay.torpedo-enter {
+  animation: torpedoFadeIn 0.4s ease forwards;
+}
+.torpedo-overlay.torpedo-lock .torpedo-bullseye,
+.torpedo-overlay.torpedo-lock .torpedo-dot-pulse {
+  animation: torpedoLockPulse 0.3s ease 3;
+}
+.torpedo-overlay.torpedo-exit {
+  animation: torpedoFadeOut 0.35s ease forwards;
 }
 
-.blimp-overlay.blimp-exit {
-  animation: blimpFadeOut 0.3s ease forwards;
-}
-
-/* Gradient sky background */
-.blimp-sky {
+/* Deep ocean / night vision BG */
+.torpedo-bg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    180deg,
-    #0a0e27 0%,
-    #0f1b3d 25%,
-    #162550 45%,
-    #1e3a6e 65%,
-    #2a4a80 80%,
-    #1a2744 100%
+  background: radial-gradient(
+    ellipse at center,
+    #0a1a0a 0%,
+    #060e06 40%,
+    #020502 100%
   );
 }
 
-/* Twinkling stars */
-.blimp-star {
+/* Static noise grain overlay */
+.torpedo-noise {
   position: absolute;
-  background: white;
+  inset: 0;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  background-size: 256px;
+  mix-blend-mode: overlay;
+}
+
+/* Sonar ping rings */
+.sonar-ping {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   border-radius: 50%;
-  animation: starTwinkle 2s ease-in-out infinite alternate;
+  border: 2px solid rgba(0,255,65,0.3);
+  animation: sonarExpand 3s ease-out infinite;
 }
 
-/* Austin skyline */
-.blimp-skyline {
+.sonar-ping-1 { width: 80px; height: 80px; animation-delay: 0s; }
+.sonar-ping-2 { width: 80px; height: 80px; animation-delay: 1s; }
+.sonar-ping-3 { width: 80px; height: 80px; animation-delay: 2s; }
+
+@keyframes sonarExpand {
+  0%   { width: 80px; height: 80px; opacity: 0.6; border-color: rgba(0,255,65,0.5); }
+  100% { width: 600px; height: 600px; opacity: 0; border-color: rgba(0,255,65,0); }
+}
+
+/* Main targeting scope */
+.torpedo-scope {
   position: absolute;
-  bottom: 0;
+  top: 50%;
+  left: 50%;
+  width: min(85vw, 85vh);
+  height: min(85vw, 85vh);
+  transform: translate(-50%, -50%);
+}
+
+.torpedo-ring-spin {
+  transform-origin: 250px 250px;
+  animation: torpedoSpin 8s linear infinite;
+}
+
+.torpedo-ring-spin-rev {
+  transform-origin: 250px 250px;
+  animation: torpedoSpin 12s linear infinite reverse;
+}
+
+@keyframes torpedoSpin {
+  to { transform: rotate(360deg); }
+}
+
+.torpedo-bullseye {
+  animation: torpedoBullseyePulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes torpedoBullseyePulse {
+  from { stroke: rgba(255,60,60,0.4); r: 28; }
+  to   { stroke: rgba(255,60,60,0.8); r: 32; }
+}
+
+.torpedo-dot-pulse {
+  animation: torpedoDotPulse 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes torpedoDotPulse {
+  from { r: 4; fill: rgba(255,60,60,0.7); }
+  to   { r: 7; fill: rgba(255,60,60,1); }
+}
+
+.torpedo-diamond-pulse {
+  animation: torpedoDiamondPulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes torpedoDiamondPulse {
+  from { stroke: rgba(255,60,60,0.2); }
+  to   { stroke: rgba(255,60,60,0.6); }
+}
+
+.torpedo-text-blink {
+  animation: hudBlink 1s step-end infinite;
+}
+
+/* Radar sweep line */
+.torpedo-sweep {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50%;
+  height: 2px;
+  transform-origin: 0 0;
+  background: linear-gradient(90deg, rgba(0,255,65,0.6), transparent);
+  animation: torpedoSweep 3s linear infinite;
+}
+
+@keyframes torpedoSweep {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* HUD top bar */
+.torpedo-hud-top,
+.torpedo-hud-bottom {
+  position: absolute;
   left: 0;
-  width: 100%;
-  height: 40%;
-  z-index: 2;
-}
-
-/* Blimp airship */
-.blimp-ship {
-  position: absolute;
-  top: 12%;
-  z-index: 3;
-  width: 340px;
-  animation: blimpFly 1.5s ease-in-out forwards;
-}
-
-.blimp-svg {
-  width: 100%;
-  height: auto;
-  filter: drop-shadow(0 4px 20px rgba(59, 130, 246, 0.4));
-}
-
-.blimp-propeller {
-  transform-origin: center;
-  animation: propSpin 0.15s linear infinite;
-}
-
-/* Trailing banner */
-.blimp-banner {
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: linear-gradient(135deg, #fbbf24, #f59e0b);
-  border: 3px solid #92400e;
-  border-radius: 4px;
-  padding: 6px 20px;
-  box-shadow:
-    4px 4px 0 rgba(0,0,0,0.4),
-    0 0 20px rgba(251, 191, 36, 0.4);
-  animation: bannerPulse 0.8s ease-in-out infinite alternate;
-  white-space: nowrap;
-}
-
-.blimp-banner-text {
-  font-family: 'Impact', 'Arial Black', sans-serif;
-  font-size: 1rem;
-  color: #1a1a1a;
-  letter-spacing: 3px;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  font-family: 'Courier New', 'Consolas', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: rgba(0,255,65,0.7);
+  text-shadow: 0 0 8px rgba(0,255,65,0.5);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  text-shadow: 1px 1px 0 rgba(255,255,255,0.3);
 }
 
-/* Route info card at bottom */
-.blimp-route-card {
+.torpedo-hud-top { top: 0; }
+.torpedo-hud-bottom { bottom: 0; }
+
+.torpedo-rec {
+  color: rgba(255,60,60,0.9);
+  animation: hudBlink 1s step-end infinite;
+}
+
+.torpedo-label {
+  color: rgba(0,255,65,0.5);
+  font-size: 0.65rem;
+}
+
+.torpedo-data {
+  color: rgba(0,255,65,0.7);
+  letter-spacing: 0.08em;
+}
+
+.torpedo-lock-text {
+  color: rgba(255,200,60,0.9);
+  animation: hudPulse 1.5s ease-in-out infinite;
+  text-shadow: 0 0 12px rgba(255,200,60,0.5);
+  font-size: 0.8rem;
+}
+
+/* Target info card */
+.torpedo-target-card {
   position: absolute;
-  bottom: 12%;
+  bottom: 14%;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 5;
-  background: rgba(30, 41, 59, 0.95);
-  border: 2px solid var(--accent);
-  border-radius: 8px;
-  padding: 10px 24px;
+  z-index: 10;
+  animation: torpedoCardIn 0.5s 0.3s ease both;
+}
+
+.torpedo-card-border {
+  position: absolute;
+  inset: -3px;
+  border: 2px solid rgba(0,255,65,0.5);
+  border-radius: 6px;
+  box-shadow:
+    0 0 12px rgba(0,255,65,0.2),
+    inset 0 0 12px rgba(0,255,65,0.05);
+}
+
+.torpedo-card-inner {
+  background: rgba(0,15,0,0.9);
+  border: 1px solid rgba(0,255,65,0.3);
+  border-radius: 4px;
+  padding: 12px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.torpedo-card-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.5);
-  animation: cardSlideUp 0.4s 0.2s ease both;
-}
-
-.blimp-route-color {
-  width: 6px;
-  height: 32px;
-  border-radius: 3px;
-  flex-shrink: 0;
-}
-
-.blimp-route-name {
-  font-family: 'Impact', 'Arial Black', sans-serif;
-  font-size: 1rem;
-  color: var(--text);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-.blimp-route-meta {
-  font-size: 0.75rem;
-  color: var(--text-muted);
+  gap: 6px;
   font-family: 'Courier New', monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: rgba(255,200,60,0.9);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-shadow: 0 0 6px rgba(255,200,60,0.4);
 }
 
-/* Searchlight cone from blimp */
-.blimp-searchlight {
-  position: absolute;
-  top: 28%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 120px;
-  height: 60%;
-  background: linear-gradient(
-    180deg,
-    rgba(251, 191, 36, 0.15) 0%,
-    rgba(251, 191, 36, 0.03) 60%,
-    transparent 100%
-  );
-  clip-path: polygon(40% 0%, 60% 0%, 100% 100%, 0% 100%);
-  z-index: 2;
-  animation: searchlightSway 2s ease-in-out infinite alternate;
-  pointer-events: none;
+.torpedo-lock-icon {
+  animation: hudPulse 1s ease-in-out infinite;
 }
 
-@keyframes blimpFadeIn {
+.torpedo-card-color {
+  width: 100%;
+  height: 3px;
+  border-radius: 2px;
+  opacity: 0.8;
+}
+
+.torpedo-card-name {
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  color: rgba(0,255,65,0.9);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(0,255,65,0.5);
+}
+
+.torpedo-card-stats {
+  display: flex;
+  gap: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.7rem;
+  color: rgba(0,255,65,0.6);
+  letter-spacing: 0.1em;
+}
+
+/* Animations */
+@keyframes torpedoFadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
 
-@keyframes blimpFadeOut {
+@keyframes torpedoFadeOut {
   from { opacity: 1; }
   to   { opacity: 0; }
 }
 
-@keyframes blimpFly {
-  from { left: -360px; opacity: 0; }
-  20%  { opacity: 1; }
-  to   { left: calc(50% - 170px); opacity: 1; }
+@keyframes torpedoLockPulse {
+  0%, 100% { r: 30; stroke: rgba(255,60,60,0.6); }
+  50%      { r: 35; stroke: rgba(255,60,60,1); }
 }
 
-@keyframes propSpin {
-  to { transform: rotate(360deg); }
-}
-
-@keyframes bannerPulse {
-  from { box-shadow: 4px 4px 0 rgba(0,0,0,0.4), 0 0 20px rgba(251, 191, 36, 0.3); }
-  to   { box-shadow: 4px 4px 0 rgba(0,0,0,0.4), 0 0 35px rgba(251, 191, 36, 0.6); }
-}
-
-@keyframes starTwinkle {
-  from { opacity: 0.3; }
-  to   { opacity: 1; }
-}
-
-@keyframes cardSlideUp {
-  from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
-}
-
-@keyframes searchlightSway {
-  from { transform: translateX(-50%) rotate(-3deg); }
-  to   { transform: translateX(-50%) rotate(3deg); }
+@keyframes torpedoCardIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(30px) scale(0.9); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
 }
 
 /* ── Leaflet overrides ────────────────────────────────────── */

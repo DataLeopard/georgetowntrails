@@ -283,22 +283,98 @@ export default function Map({ routes, activeRouteId, onRouteClick }) {
         aria-label="Trail map of Georgetown, Texas — detail view"
       />
 
-      {/* Overview map (right panel, only when split) */}
+      {/* Overview map (right panel, only when split) — submarine targeting scope */}
       {isSplit && (
-        <div className="overview-pane">
-          <div className="overview-label">OVERVIEW</div>
+        <div className="overview-pane scope-panel">
+          {/* Map underneath */}
           <div
             ref={overviewMapRef}
             style={{ width: '100%', height: '100%' }}
             role="application"
-            aria-label="Trail map overview"
+            aria-label="Trail map overview — targeting scope"
           />
+
+          {/* Scope overlay HUD */}
+          <div className="scope-overlay">
+            {/* Circular vignette */}
+            <div className="scope-vignette" />
+
+            {/* Crosshair SVG */}
+            <svg className="scope-crosshair" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid meet">
+              {/* Outer ring */}
+              <circle cx="200" cy="200" r="180" fill="none" stroke="rgba(0,255,65,0.35)" strokeWidth="2" />
+              <circle cx="200" cy="200" r="160" fill="none" stroke="rgba(0,255,65,0.15)" strokeWidth="1" strokeDasharray="8 6" />
+              <circle cx="200" cy="200" r="120" fill="none" stroke="rgba(0,255,65,0.2)" strokeWidth="1" />
+              <circle cx="200" cy="200" r="60" fill="none" stroke="rgba(0,255,65,0.3)" strokeWidth="1.5" />
+              <circle cx="200" cy="200" r="6" fill="rgba(255,60,60,0.8)" />
+
+              {/* Crosshair lines */}
+              <line x1="200" y1="10" x2="200" y2="140" stroke="rgba(0,255,65,0.4)" strokeWidth="1" />
+              <line x1="200" y1="260" x2="200" y2="390" stroke="rgba(0,255,65,0.4)" strokeWidth="1" />
+              <line x1="10" y1="200" x2="140" y2="200" stroke="rgba(0,255,65,0.4)" strokeWidth="1" />
+              <line x1="260" y1="200" x2="390" y2="200" stroke="rgba(0,255,65,0.4)" strokeWidth="1" />
+
+              {/* Range tick marks */}
+              {[0, 45, 90, 135, 180, 225, 270, 315].map(angle => {
+                const rad = (angle * Math.PI) / 180;
+                const x1 = 200 + 170 * Math.cos(rad);
+                const y1 = 200 + 170 * Math.sin(rad);
+                const x2 = 200 + 185 * Math.cos(rad);
+                const y2 = 200 + 185 * Math.sin(rad);
+                return <line key={angle} x1={x1} y1={y1} x2={x2} y2={y2} stroke="rgba(0,255,65,0.5)" strokeWidth="2" />;
+              })}
+
+              {/* Corner brackets */}
+              <path d="M30,30 L30,70 M30,30 L70,30" fill="none" stroke="rgba(0,255,65,0.5)" strokeWidth="2" />
+              <path d="M370,30 L370,70 M370,30 L330,30" fill="none" stroke="rgba(0,255,65,0.5)" strokeWidth="2" />
+              <path d="M30,370 L30,330 M30,370 L70,370" fill="none" stroke="rgba(0,255,65,0.5)" strokeWidth="2" />
+              <path d="M370,370 L370,330 M370,370 L330,370" fill="none" stroke="rgba(0,255,65,0.5)" strokeWidth="2" />
+
+              {/* Diamond target indicator */}
+              <polygon points="200,170 230,200 200,230 170,200" fill="none" stroke="rgba(255,60,60,0.5)" strokeWidth="1.5" />
+            </svg>
+
+            {/* Scan line */}
+            <div className="scope-scanline" />
+
+            {/* HUD data readouts */}
+            <div className="scope-hud-top">
+              <span className="scope-label-blink">● REC</span>
+              <span>TACTICAL OVERVIEW</span>
+              <span className="scope-data">ZOOM 12x</span>
+            </div>
+
+            <div className="scope-hud-bottom">
+              <span className="scope-data">LAT 30.6627</span>
+              <span className="scope-label-pulse">◉ TARGET LOCK</span>
+              <span className="scope-data">LON -97.6779</span>
+            </div>
+
+            <div className="scope-hud-left">
+              <div className="scope-data">ALT</div>
+              <div className="scope-data">3200ft</div>
+              <div className="scope-rangebar" />
+            </div>
+
+            <div className="scope-hud-right">
+              <div className="scope-data">RNG</div>
+              <div className="scope-data">1.4mi</div>
+              <div className="scope-rangebar" />
+            </div>
+          </div>
         </div>
       )}
 
-      {/* Split indicator */}
+      {/* Split divider — military style */}
       {isSplit && (
-        <div className="split-divider" />
+        <div className="split-divider-military">
+          <div className="divider-line" />
+          <div className="divider-glow" />
+          <div className="divider-notch divider-notch-top" />
+          <div className="divider-notch divider-notch-mid" />
+          <div className="divider-notch divider-notch-bot" />
+          <div className="divider-label">◄ DETAIL │ SCOPE ►</div>
+        </div>
       )}
 
       {mapLoading && (

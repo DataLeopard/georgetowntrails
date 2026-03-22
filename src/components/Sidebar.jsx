@@ -57,142 +57,130 @@ function RoutePreviewPath({ coords, color, size = 60 }) {
   );
 }
 
-/** Blimp over Austin skyline reveal */
-function BlimpReveal({ route, onComplete }) {
+/** Submarine torpedo targeting reveal */
+function TargetLockReveal({ route, onComplete }) {
   const [phase, setPhase] = useState('enter');
+  const starsRef = useRef(
+    Array.from({ length: 12 }, () => ({
+      x: 5 + Math.random() * 90,
+      y: 5 + Math.random() * 30,
+      d: Math.random() * 2,
+      s: 1 + Math.random() * 2,
+    }))
+  );
 
   useEffect(() => {
-    const t1 = setTimeout(() => setPhase('hold'), 400);
-    const t2 = setTimeout(() => setPhase('exit'), 2200);
-    const t3 = setTimeout(() => onComplete(), 2600);
+    const t1 = setTimeout(() => setPhase('lock'), 500);
+    const t2 = setTimeout(() => setPhase('exit'), 2400);
+    const t3 = setTimeout(() => onComplete(), 2800);
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, [onComplete]);
 
   return (
-    <div className={`blimp-overlay blimp-${phase}`}>
-      {/* Gradient sky */}
-      <div className="blimp-sky" />
+    <div className={`torpedo-overlay torpedo-${phase}`}>
+      {/* Deep ocean / night-vision background */}
+      <div className="torpedo-bg" />
 
-      {/* Stars */}
-      <div className="blimp-stars">
-        {Array.from({ length: 20 }, (_, i) => (
-          <div key={i} className="blimp-star" style={{
-            left: `${5 + Math.random() * 90}%`,
-            top: `${5 + Math.random() * 35}%`,
-            animationDelay: `${Math.random() * 2}s`,
-            width: `${1 + Math.random() * 2}px`,
-            height: `${1 + Math.random() * 2}px`,
-          }} />
-        ))}
-      </div>
+      {/* Static noise grain */}
+      <div className="torpedo-noise" />
 
-      {/* Austin skyline silhouette */}
-      <svg className="blimp-skyline" viewBox="0 0 800 200" preserveAspectRatio="xMidYMax slice">
-        {/* Background buildings */}
-        <rect x="30" y="80" width="35" height="120" fill="#1a2744" />
-        <rect x="70" y="60" width="25" height="140" fill="#1e2d4d" />
-        <rect x="100" y="90" width="40" height="110" fill="#1a2744" />
-        <rect x="150" y="40" width="30" height="160" fill="#1e2d4d" />
-        {/* Frost Bank Tower */}
-        <polygon points="200,30 215,10 230,30 230,200 200,200" fill="#223356" />
-        <rect x="203" y="35" width="4" height="6" fill="#4fc3f7" opacity="0.6" />
-        <rect x="213" y="45" width="4" height="6" fill="#4fc3f7" opacity="0.4" />
-        <rect x="223" y="55" width="4" height="6" fill="#4fc3f7" opacity="0.5" />
-        {/* Congress bridge area */}
-        <rect x="250" y="70" width="50" height="130" fill="#1a2744" />
-        <rect x="255" y="75" width="6" height="8" fill="#4fc3f7" opacity="0.3" />
-        <rect x="268" y="85" width="6" height="8" fill="#fbbf24" opacity="0.4" />
-        <rect x="280" y="78" width="6" height="8" fill="#4fc3f7" opacity="0.5" />
-        {/* The Independent (jenga tower) */}
-        <rect x="310" y="15" width="28" height="185" fill="#263a5e" />
-        <rect x="308" y="50" width="32" height="12" fill="#2a4068" />
-        <rect x="306" y="90" width="36" height="12" fill="#2a4068" />
-        <rect x="308" y="130" width="32" height="12" fill="#2a4068" />
-        <rect x="315" y="20" width="4" height="6" fill="#4fc3f7" opacity="0.6" />
-        <rect x="325" y="35" width="4" height="6" fill="#fbbf24" opacity="0.4" />
-        <rect x="318" y="65" width="4" height="6" fill="#4fc3f7" opacity="0.3" />
-        {/* Capitol dome */}
-        <rect x="370" y="60" width="60" height="140" fill="#1e2d4d" />
-        <ellipse cx="400" cy="60" rx="25" ry="15" fill="#263a5e" />
-        <rect x="397" y="35" width="6" height="25" fill="#263a5e" />
-        <circle cx="400" cy="33" r="4" fill="#fbbf24" opacity="0.8" />
-        <rect x="378" y="80" width="5" height="7" fill="#fbbf24" opacity="0.5" />
-        <rect x="390" y="90" width="5" height="7" fill="#4fc3f7" opacity="0.4" />
-        <rect x="405" y="75" width="5" height="7" fill="#4fc3f7" opacity="0.6" />
-        {/* More buildings right side */}
-        <rect x="445" y="55" width="35" height="145" fill="#1a2744" />
-        <rect x="490" y="75" width="45" height="125" fill="#1e2d4d" />
-        <rect x="495" y="80" width="5" height="7" fill="#4fc3f7" opacity="0.3" />
-        <rect x="515" y="90" width="5" height="7" fill="#fbbf24" opacity="0.4" />
-        <rect x="545" y="45" width="30" height="155" fill="#223356" />
-        <rect x="585" y="65" width="40" height="135" fill="#1a2744" />
-        <rect x="635" y="85" width="30" height="115" fill="#1e2d4d" />
-        <rect x="675" y="50" width="25" height="150" fill="#223356" />
-        <rect x="710" y="70" width="35" height="130" fill="#1a2744" />
-        <rect x="755" y="90" width="45" height="110" fill="#1e2d4d" />
-        {/* Window lights scattered */}
-        <rect x="450" y="65" width="4" height="5" fill="#4fc3f7" opacity="0.5" />
-        <rect x="460" y="80" width="4" height="5" fill="#fbbf24" opacity="0.3" />
-        <rect x="550" y="55" width="4" height="5" fill="#4fc3f7" opacity="0.4" />
-        <rect x="640" y="95" width="4" height="5" fill="#fbbf24" opacity="0.5" />
-        <rect x="680" y="60" width="4" height="5" fill="#4fc3f7" opacity="0.3" />
-        <rect x="720" y="80" width="4" height="5" fill="#fbbf24" opacity="0.4" />
+      {/* Sonar ping rings */}
+      <div className="sonar-ping sonar-ping-1" />
+      <div className="sonar-ping sonar-ping-2" />
+      <div className="sonar-ping sonar-ping-3" />
+
+      {/* Main targeting scope SVG */}
+      <svg className="torpedo-scope" viewBox="0 0 500 500" preserveAspectRatio="xMidYMid meet">
+        {/* Outer rings */}
+        <circle cx="250" cy="250" r="230" fill="none" stroke="rgba(0,255,65,0.2)" strokeWidth="2" />
+        <circle cx="250" cy="250" r="200" fill="none" stroke="rgba(0,255,65,0.15)" strokeWidth="1" strokeDasharray="12 6" className="torpedo-ring-spin" />
+        <circle cx="250" cy="250" r="170" fill="none" stroke="rgba(0,255,65,0.3)" strokeWidth="1.5" />
+        <circle cx="250" cy="250" r="120" fill="none" stroke="rgba(0,255,65,0.2)" strokeWidth="1" strokeDasharray="4 8" className="torpedo-ring-spin-rev" />
+        <circle cx="250" cy="250" r="70" fill="none" stroke="rgba(0,255,65,0.35)" strokeWidth="2" />
+        <circle cx="250" cy="250" r="30" fill="none" stroke="rgba(255,60,60,0.6)" strokeWidth="2" className="torpedo-bullseye" />
+
+        {/* Kill dot */}
+        <circle cx="250" cy="250" r="5" fill="rgba(255,60,60,0.9)" className="torpedo-dot-pulse" />
+
+        {/* Main crosshairs */}
+        <line x1="250" y1="10" x2="250" y2="180" stroke="rgba(0,255,65,0.5)" strokeWidth="1.5" />
+        <line x1="250" y1="320" x2="250" y2="490" stroke="rgba(0,255,65,0.5)" strokeWidth="1.5" />
+        <line x1="10" y1="250" x2="180" y2="250" stroke="rgba(0,255,65,0.5)" strokeWidth="1.5" />
+        <line x1="320" y1="250" x2="490" y2="250" stroke="rgba(0,255,65,0.5)" strokeWidth="1.5" />
+
+        {/* Diagonal guide lines */}
+        <line x1="80" y1="80" x2="180" y2="180" stroke="rgba(0,255,65,0.15)" strokeWidth="1" />
+        <line x1="420" y1="80" x2="320" y2="180" stroke="rgba(0,255,65,0.15)" strokeWidth="1" />
+        <line x1="80" y1="420" x2="180" y2="320" stroke="rgba(0,255,65,0.15)" strokeWidth="1" />
+        <line x1="420" y1="420" x2="320" y2="320" stroke="rgba(0,255,65,0.15)" strokeWidth="1" />
+
+        {/* Range ticks around outer ring */}
+        {Array.from({ length: 36 }, (_, i) => {
+          const angle = (i * 10 * Math.PI) / 180;
+          const r1 = i % 3 === 0 ? 215 : 222;
+          const r2 = 235;
+          return (
+            <line key={i}
+              x1={250 + r1 * Math.cos(angle)} y1={250 + r1 * Math.sin(angle)}
+              x2={250 + r2 * Math.cos(angle)} y2={250 + r2 * Math.sin(angle)}
+              stroke={i % 9 === 0 ? 'rgba(255,60,60,0.6)' : 'rgba(0,255,65,0.4)'}
+              strokeWidth={i % 3 === 0 ? 2 : 1}
+            />
+          );
+        })}
+
+        {/* Corner bracket frames */}
+        <path d="M30,30 L30,90 M30,30 L90,30" fill="none" stroke="rgba(0,255,65,0.5)" strokeWidth="2.5" />
+        <path d="M470,30 L470,90 M470,30 L410,30" fill="none" stroke="rgba(0,255,65,0.5)" strokeWidth="2.5" />
+        <path d="M30,470 L30,410 M30,470 L90,470" fill="none" stroke="rgba(0,255,65,0.5)" strokeWidth="2.5" />
+        <path d="M470,470 L470,410 M470,470 L410,470" fill="none" stroke="rgba(0,255,65,0.5)" strokeWidth="2.5" />
+
+        {/* Target diamond */}
+        <polygon points="250,200 300,250 250,300 200,250" fill="none" stroke="rgba(255,60,60,0.4)" strokeWidth="1.5" className="torpedo-diamond-pulse" />
+
+        {/* HUD text */}
+        <text x="40" y="25" fill="rgba(0,255,65,0.7)" fontSize="11" fontFamily="'Courier New', monospace" fontWeight="bold">TORPEDO BAY 01</text>
+        <text x="350" y="25" fill="rgba(255,60,60,0.8)" fontSize="11" fontFamily="'Courier New', monospace" fontWeight="bold" className="torpedo-text-blink">● ARMED</text>
+        <text x="40" y="490" fill="rgba(0,255,65,0.6)" fontSize="10" fontFamily="'Courier New', monospace">BRG 247° · SPD 12kts</text>
+        <text x="340" y="490" fill="rgba(0,255,65,0.6)" fontSize="10" fontFamily="'Courier New', monospace">DEPTH 200ft</text>
       </svg>
 
-      {/* Blimp / airship */}
-      <div className="blimp-ship">
-        <svg viewBox="0 0 320 140" className="blimp-svg">
-          {/* Blimp body */}
-          <defs>
-            <linearGradient id="blimpGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#60a5fa" />
-              <stop offset="40%" stopColor="#3b82f6" />
-              <stop offset="100%" stopColor="#1e40af" />
-            </linearGradient>
-            <linearGradient id="blimpShine" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="white" stopOpacity="0.3" />
-              <stop offset="50%" stopColor="white" stopOpacity="0" />
-            </linearGradient>
-          </defs>
-          {/* Main envelope */}
-          <ellipse cx="160" cy="45" rx="140" ry="40" fill="url(#blimpGrad)" />
-          <ellipse cx="160" cy="38" rx="120" ry="22" fill="url(#blimpShine)" />
-          {/* Tail fins */}
-          <polygon points="285,30 310,15 310,40 290,40" fill="#2563eb" />
-          <polygon points="285,55 310,70 310,45 290,45" fill="#1d4ed8" />
-          {/* Gondola */}
-          <rect x="110" y="85" width="100" height="30" rx="6" fill="#1e293b" stroke="#475569" strokeWidth="1.5" />
-          {/* Gondola windows */}
-          <rect x="120" y="90" width="12" height="10" rx="2" fill="#4fc3f7" opacity="0.8" />
-          <rect x="138" y="90" width="12" height="10" rx="2" fill="#4fc3f7" opacity="0.6" />
-          <rect x="156" y="90" width="12" height="10" rx="2" fill="#4fc3f7" opacity="0.8" />
-          <rect x="174" y="90" width="12" height="10" rx="2" fill="#4fc3f7" opacity="0.6" />
-          <rect x="192" y="90" width="12" height="10" rx="2" fill="#4fc3f7" opacity="0.8" />
-          {/* Cables */}
-          <line x1="130" y1="82" x2="140" y2="85" stroke="#475569" strokeWidth="1" />
-          <line x1="190" y1="82" x2="180" y2="85" stroke="#475569" strokeWidth="1" />
-          {/* Propeller */}
-          <circle cx="300" cy="45" r="3" fill="#94a3b8" />
-          <line x1="300" y1="35" x2="300" y2="55" stroke="#94a3b8" strokeWidth="2" className="blimp-propeller" />
-          {/* LED strip on side */}
-          <rect x="50" y="42" width="220" height="4" rx="2" fill="#fbbf24" opacity="0.9" />
-        </svg>
+      {/* Scan sweep */}
+      <div className="torpedo-sweep" />
 
-        {/* Banner trailing from blimp */}
-        <div className="blimp-banner">
-          <span className="blimp-banner-text">FREE APARTMENT LOCATING</span>
+      {/* HUD data bars */}
+      <div className="torpedo-hud-top">
+        <span className="torpedo-rec">● REC</span>
+        <span className="torpedo-label">SUBMARINE TACTICAL DISPLAY</span>
+        <span className="torpedo-data">MARK {route.id}</span>
+      </div>
+
+      {/* Route target card */}
+      <div className="torpedo-target-card">
+        <div className="torpedo-card-border" />
+        <div className="torpedo-card-inner">
+          <div className="torpedo-card-header">
+            <span className="torpedo-lock-icon">◎</span>
+            <span>TARGET ACQUIRED</span>
+          </div>
+          <div className="torpedo-card-color" style={{ background: route.color }} />
+          <div className="torpedo-card-name">{route.name}</div>
+          <div className="torpedo-card-stats">
+            <span>{route.distance} MI</span>
+            <span>·</span>
+            <span>{route.duration}</span>
+            <span>·</span>
+            <span>{route.type.toUpperCase()}</span>
+          </div>
         </div>
       </div>
 
-      {/* Route info card */}
-      <div className="blimp-route-card">
-        <div className="blimp-route-color" style={{ background: route.color }} />
-        <div className="blimp-route-name">{route.name}</div>
-        <div className="blimp-route-meta">{route.distance} mi · {route.duration}</div>
+      {/* Bottom HUD */}
+      <div className="torpedo-hud-bottom">
+        <span className="torpedo-data">LAT {getRouteCenter(route.coords)[0].toFixed(4)}</span>
+        <span className="torpedo-lock-text">◉ LOCK CONFIRMED</span>
+        <span className="torpedo-data">LON {getRouteCenter(route.coords)[1].toFixed(4)}</span>
       </div>
-
-      {/* Searchlight beams */}
-      <div className="blimp-searchlight" />
     </div>
   );
 }
@@ -323,7 +311,7 @@ export default function Sidebar({ routes, activeRouteId, onRouteClick, isOpen, o
       </aside>
 
       {revealRoute && (
-        <BlimpReveal route={revealRoute} onComplete={handleRevealComplete} />
+        <TargetLockReveal route={revealRoute} onComplete={handleRevealComplete} />
       )}
     </>
   );
