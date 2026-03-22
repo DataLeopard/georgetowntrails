@@ -57,226 +57,184 @@ function RoutePreviewPath({ coords, color, size = 60 }) {
   );
 }
 
-/** Night vision binocular targeting reveal with soldier */
+/** Alien cyborg spaceship landing dashboard reveal */
 function TargetLockReveal({ route, onComplete }) {
-  const [phase, setPhase] = useState('enter');
+  const [phase, setPhase] = useState('warp');
 
   useEffect(() => {
-    const t1 = setTimeout(() => setPhase('zoom'), 300);
-    const t2 = setTimeout(() => setPhase('lock'), 900);
-    const t3 = setTimeout(() => setPhase('flash'), 2600);
+    const t1 = setTimeout(() => setPhase('approach'), 600);
+    const t2 = setTimeout(() => setPhase('scan'), 1200);
+    const t3 = setTimeout(() => setPhase('land'), 2200);
     const t4 = setTimeout(() => setPhase('exit'), 2800);
     const t5 = setTimeout(() => onComplete(), 3200);
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); clearTimeout(t5); };
   }, [onComplete]);
 
+  const center = getRouteCenter(route.coords);
+
   return (
-    <div className={`torpedo-overlay torpedo-${phase}`}>
-      {/* Deep green night-vision background */}
-      <div className="torpedo-bg" />
+    <div className={`alien-overlay alien-${phase}`}>
+      {/* Deep space background */}
+      <div className="alien-space" />
 
-      {/* Binocular mask — two circles with bridge */}
-      <div className="bino-mask" />
-
-      {/* CRT scanlines across entire screen */}
-      <div className="crt-lines" />
-
-      {/* Static noise grain */}
-      <div className="torpedo-noise" />
-
-      {/* White flash on lock */}
-      <div className="nvg-flash" />
-
-      {/* Sonar ping rings */}
-      <div className="sonar-ping sonar-ping-1" />
-      <div className="sonar-ping sonar-ping-2" />
-      <div className="sonar-ping sonar-ping-3" />
-
-      {/* Soldier silhouettes walking across bottom */}
-      <svg className="soldier-layer" viewBox="0 0 1000 200" preserveAspectRatio="xMidYMax slice">
-        {/* Soldier 1 — crouching with rifle, moving left to right */}
-        <g className="soldier soldier-1">
-          {/* Body */}
-          <circle cx="50" cy="120" r="10" fill="rgba(0,255,65,0.25)" />
-          {/* Torso leaning forward */}
-          <line x1="50" y1="130" x2="45" y2="155" stroke="rgba(0,255,65,0.25)" strokeWidth="4" strokeLinecap="round" />
-          {/* Legs */}
-          <line x1="45" y1="155" x2="35" y2="180" stroke="rgba(0,255,65,0.25)" strokeWidth="3" strokeLinecap="round" />
-          <line x1="45" y1="155" x2="55" y2="178" stroke="rgba(0,255,65,0.25)" strokeWidth="3" strokeLinecap="round" />
-          {/* Arms + rifle */}
-          <line x1="48" y1="135" x2="70" y2="128" stroke="rgba(0,255,65,0.25)" strokeWidth="2.5" strokeLinecap="round" />
-          <line x1="70" y1="128" x2="95" y2="122" stroke="rgba(0,255,65,0.3)" strokeWidth="2" strokeLinecap="round" />
-          {/* Helmet */}
-          <ellipse cx="50" cy="116" rx="12" ry="7" fill="rgba(0,255,65,0.2)" />
-        </g>
-
-        {/* Soldier 2 — standing with binoculars, moving right */}
-        <g className="soldier soldier-2">
-          <circle cx="50" cy="115" r="10" fill="rgba(0,255,65,0.2)" />
-          <line x1="50" y1="125" x2="50" y2="160" stroke="rgba(0,255,65,0.2)" strokeWidth="4" strokeLinecap="round" />
-          <line x1="50" y1="160" x2="40" y2="185" stroke="rgba(0,255,65,0.2)" strokeWidth="3" strokeLinecap="round" />
-          <line x1="50" y1="160" x2="60" y2="185" stroke="rgba(0,255,65,0.2)" strokeWidth="3" strokeLinecap="round" />
-          {/* Arms holding binoculars up */}
-          <line x1="48" y1="130" x2="45" y2="118" stroke="rgba(0,255,65,0.2)" strokeWidth="2.5" strokeLinecap="round" />
-          <line x1="52" y1="130" x2="55" y2="118" stroke="rgba(0,255,65,0.2)" strokeWidth="2.5" strokeLinecap="round" />
-          <rect x="42" y="110" width="16" height="8" rx="2" fill="rgba(0,255,65,0.15)" />
-          <ellipse cx="50" cy="112" rx="13" ry="6" fill="rgba(0,255,65,0.15)" />
-        </g>
-
-        {/* Soldier 3 — prone/crawling */}
-        <g className="soldier soldier-3">
-          <circle cx="50" cy="170" r="8" fill="rgba(0,255,65,0.18)" />
-          <line x1="50" y1="175" x2="85" y2="178" stroke="rgba(0,255,65,0.18)" strokeWidth="5" strokeLinecap="round" />
-          <line x1="85" y1="178" x2="95" y2="185" stroke="rgba(0,255,65,0.18)" strokeWidth="3" strokeLinecap="round" />
-          <line x1="85" y1="178" x2="100" y2="182" stroke="rgba(0,255,65,0.18)" strokeWidth="3" strokeLinecap="round" />
-          <line x1="48" y1="168" x2="30" y2="165" stroke="rgba(0,255,65,0.2)" strokeWidth="2" strokeLinecap="round" />
-          <line x1="30" y1="165" x2="15" y2="163" stroke="rgba(0,255,65,0.22)" strokeWidth="1.5" strokeLinecap="round" />
-        </g>
-      </svg>
-
-      {/* Heartbeat line at bottom */}
-      <div className="heartbeat-container">
-        <svg className="heartbeat-svg" viewBox="0 0 300 40" preserveAspectRatio="none">
-          <polyline
-            points="0,20 30,20 40,20 45,5 50,35 55,15 60,25 65,20 100,20 130,20 140,20 145,5 150,35 155,15 160,25 165,20 200,20 230,20 240,20 245,5 250,35 255,15 260,25 265,20 300,20"
-            fill="none"
-            stroke="rgba(0,255,65,0.5)"
-            strokeWidth="1.5"
-            className="heartbeat-line"
-          />
-        </svg>
+      {/* Warp speed lines */}
+      <div className="warp-tunnel">
+        {Array.from({ length: 40 }, (_, i) => (
+          <div key={i} className="warp-line" style={{
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+            animationDelay: `${Math.random() * 0.5}s`,
+            animationDuration: `${0.4 + Math.random() * 0.4}s`,
+            transform: `rotate(${Math.atan2(50 - Math.random()*100, 50 - Math.random()*100) * 180/Math.PI}deg)`,
+          }} />
+        ))}
       </div>
 
-      {/* Main targeting scope SVG — binocular zoom-in */}
-      <svg className="torpedo-scope" viewBox="0 0 500 500" preserveAspectRatio="xMidYMid meet">
-        {/* Outer rings */}
-        <circle cx="250" cy="250" r="230" fill="none" stroke="rgba(0,255,65,0.3)" strokeWidth="2.5" />
-        <circle cx="250" cy="250" r="210" fill="none" stroke="rgba(0,255,65,0.1)" strokeWidth="1" strokeDasharray="3 3" />
-        <circle cx="250" cy="250" r="200" fill="none" stroke="rgba(0,255,65,0.2)" strokeWidth="1.5" strokeDasharray="12 6" className="torpedo-ring-spin" />
-        <circle cx="250" cy="250" r="170" fill="none" stroke="rgba(0,255,65,0.35)" strokeWidth="2" />
-        <circle cx="250" cy="250" r="140" fill="none" stroke="rgba(0,255,65,0.1)" strokeWidth="1" strokeDasharray="6 10" className="torpedo-ring-spin-rev" />
-        <circle cx="250" cy="250" r="120" fill="none" stroke="rgba(0,255,65,0.25)" strokeWidth="1.5" strokeDasharray="4 8" />
-        <circle cx="250" cy="250" r="90" fill="none" stroke="rgba(0,255,65,0.15)" strokeWidth="1" />
-        <circle cx="250" cy="250" r="70" fill="none" stroke="rgba(0,255,65,0.4)" strokeWidth="2" />
-        <circle cx="250" cy="250" r="30" fill="none" stroke="rgba(255,60,60,0.7)" strokeWidth="2.5" className="torpedo-bullseye" />
+      {/* Nebula glow */}
+      <div className="alien-nebula" />
 
-        {/* Kill dot */}
-        <circle cx="250" cy="250" r="5" fill="rgba(255,60,60,0.9)" className="torpedo-dot-pulse" />
-
-        {/* Main crosshairs — thicker */}
-        <line x1="250" y1="10" x2="250" y2="180" stroke="rgba(0,255,65,0.6)" strokeWidth="2" />
-        <line x1="250" y1="320" x2="250" y2="490" stroke="rgba(0,255,65,0.6)" strokeWidth="2" />
-        <line x1="10" y1="250" x2="180" y2="250" stroke="rgba(0,255,65,0.6)" strokeWidth="2" />
-        <line x1="320" y1="250" x2="490" y2="250" stroke="rgba(0,255,65,0.6)" strokeWidth="2" />
-
-        {/* Mil-dot range marks on crosshairs */}
-        {[60, 90, 120, 150].map(d => (
-          <g key={d}>
-            <line x1={245} y1={250-d} x2={255} y2={250-d} stroke="rgba(0,255,65,0.4)" strokeWidth="1" />
-            <line x1={245} y1={250+d} x2={255} y2={250+d} stroke="rgba(0,255,65,0.4)" strokeWidth="1" />
-            <line x1={250-d} y1={245} x2={250-d} y2={255} stroke="rgba(0,255,65,0.4)" strokeWidth="1" />
-            <line x1={250+d} y1={245} x2={250+d} y2={255} stroke="rgba(0,255,65,0.4)" strokeWidth="1" />
-          </g>
+      {/* Stars field */}
+      <div className="alien-stars">
+        {Array.from({ length: 60 }, (_, i) => (
+          <div key={i} className="alien-star" style={{
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+            animationDelay: `${Math.random() * 3}s`,
+            width: `${1 + Math.random() * 2.5}px`,
+            height: `${1 + Math.random() * 2.5}px`,
+            background: i % 5 === 0 ? '#ff6bff' : i % 3 === 0 ? '#6bffff' : 'white',
+          }} />
         ))}
+      </div>
 
-        {/* Diagonal guide lines */}
-        <line x1="80" y1="80" x2="180" y2="180" stroke="rgba(0,255,65,0.15)" strokeWidth="1" />
-        <line x1="420" y1="80" x2="320" y2="180" stroke="rgba(0,255,65,0.15)" strokeWidth="1" />
-        <line x1="80" y1="420" x2="180" y2="320" stroke="rgba(0,255,65,0.15)" strokeWidth="1" />
-        <line x1="420" y1="420" x2="320" y2="320" stroke="rgba(0,255,65,0.15)" strokeWidth="1" />
+      {/* Hexagonal HUD grid */}
+      <svg className="hex-grid" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid meet">
+        {/* Outer hex ring */}
+        <polygon points="300,30 540,165 540,435 300,570 60,435 60,165" fill="none" stroke="rgba(0,255,255,0.15)" strokeWidth="1.5" className="hex-spin" />
+        <polygon points="300,60 510,180 510,420 300,540 90,420 90,180" fill="none" stroke="rgba(0,255,255,0.1)" strokeWidth="1" strokeDasharray="10 5" className="hex-spin-rev" />
+        <polygon points="300,100 470,200 470,400 300,500 130,400 130,200" fill="none" stroke="rgba(180,100,255,0.2)" strokeWidth="1.5" />
+        <polygon points="300,150 430,220 430,380 300,450 170,380 170,220" fill="none" stroke="rgba(0,255,255,0.25)" strokeWidth="1" strokeDasharray="6 8" className="hex-spin" />
+        <polygon points="300,200 380,250 380,350 300,400 220,350 220,250" fill="none" stroke="rgba(255,100,200,0.3)" strokeWidth="2" />
 
-        {/* Range ticks — 72 of them */}
-        {Array.from({ length: 72 }, (_, i) => {
-          const angle = (i * 5 * Math.PI) / 180;
-          const major = i % 6 === 0;
-          const r1 = major ? 210 : 220;
-          const r2 = 235;
+        {/* Center targeting eye */}
+        <circle cx="300" cy="300" r="40" fill="none" stroke="rgba(0,255,255,0.4)" strokeWidth="2" className="alien-eye-pulse" />
+        <circle cx="300" cy="300" r="15" fill="none" stroke="rgba(255,0,200,0.6)" strokeWidth="2" />
+        <circle cx="300" cy="300" r="5" fill="rgba(255,0,200,0.8)" className="alien-core-pulse" />
+
+        {/* Scanning beam lines radiating from center */}
+        {[0, 60, 120, 180, 240, 300].map(angle => {
+          const rad = (angle * Math.PI) / 180;
           return (
-            <line key={i}
-              x1={250 + r1 * Math.cos(angle)} y1={250 + r1 * Math.sin(angle)}
-              x2={250 + r2 * Math.cos(angle)} y2={250 + r2 * Math.sin(angle)}
-              stroke={i % 18 === 0 ? 'rgba(255,60,60,0.7)' : major ? 'rgba(0,255,65,0.5)' : 'rgba(0,255,65,0.2)'}
-              strokeWidth={major ? 2 : 0.8}
+            <line key={angle}
+              x1={300 + 50 * Math.cos(rad)} y1={300 + 50 * Math.sin(rad)}
+              x2={300 + 260 * Math.cos(rad)} y2={300 + 260 * Math.sin(rad)}
+              stroke="rgba(0,255,255,0.12)" strokeWidth="1"
             />
           );
         })}
 
-        {/* Corner bracket frames */}
-        <path d="M25,25 L25,95 M25,25 L95,25" fill="none" stroke="rgba(0,255,65,0.6)" strokeWidth="3" />
-        <path d="M475,25 L475,95 M475,25 L405,25" fill="none" stroke="rgba(0,255,65,0.6)" strokeWidth="3" />
-        <path d="M25,475 L25,405 M25,475 L95,475" fill="none" stroke="rgba(0,255,65,0.6)" strokeWidth="3" />
-        <path d="M475,475 L475,405 M475,475 L405,475" fill="none" stroke="rgba(0,255,65,0.6)" strokeWidth="3" />
+        {/* Data nodes at hex vertices */}
+        {[[300,30],[540,165],[540,435],[300,570],[60,435],[60,165]].map(([x,y], i) => (
+          <g key={i}>
+            <circle cx={x} cy={y} r="6" fill="rgba(0,255,255,0.3)" className="node-pulse" style={{animationDelay:`${i*0.2}s`}} />
+            <circle cx={x} cy={y} r="3" fill="rgba(0,255,255,0.7)" />
+          </g>
+        ))}
 
-        {/* Target diamond pulsing */}
-        <polygon points="250,195 305,250 250,305 195,250" fill="none" stroke="rgba(255,60,60,0.5)" strokeWidth="2" className="torpedo-diamond-pulse" />
-
-        {/* Compass rose */}
-        <text x="245" y="48" fill="rgba(0,255,65,0.5)" fontSize="10" fontFamily="monospace" fontWeight="bold">N</text>
-        <text x="245" y="478" fill="rgba(0,255,65,0.4)" fontSize="10" fontFamily="monospace" fontWeight="bold">S</text>
-        <text x="468" y="254" fill="rgba(0,255,65,0.4)" fontSize="10" fontFamily="monospace" fontWeight="bold">E</text>
-        <text x="22" y="254" fill="rgba(0,255,65,0.4)" fontSize="10" fontFamily="monospace" fontWeight="bold">W</text>
-
-        {/* HUD text */}
-        <text x="35" y="22" fill="rgba(0,255,65,0.8)" fontSize="12" fontFamily="'Courier New', monospace" fontWeight="bold">NVG SCOPE MK-IV</text>
-        <text x="355" y="22" fill="rgba(255,60,60,0.9)" fontSize="12" fontFamily="'Courier New', monospace" fontWeight="bold" className="torpedo-text-blink">● ARMED</text>
-        <text x="35" y="492" fill="rgba(0,255,65,0.6)" fontSize="10" fontFamily="'Courier New', monospace">BRG 247° · SPD 12kts · WIND 8mph NE</text>
-        <text x="355" y="492" fill="rgba(0,255,65,0.6)" fontSize="10" fontFamily="'Courier New', monospace">ALT 200ft</text>
+        {/* Alien script text around rings */}
+        <text x="300" y="85" textAnchor="middle" fill="rgba(0,255,255,0.4)" fontSize="9" fontFamily="monospace">XENO-NAV // SECTOR 7G</text>
+        <text x="300" y="555" textAnchor="middle" fill="rgba(0,255,255,0.3)" fontSize="9" fontFamily="monospace">ORBITAL DESCENT PROTOCOL</text>
+        <text x="75" y="300" fill="rgba(180,100,255,0.4)" fontSize="8" fontFamily="monospace" transform="rotate(-90,75,300)">HULL INTEGRITY 98.7%</text>
+        <text x="525" y="300" fill="rgba(180,100,255,0.4)" fontSize="8" fontFamily="monospace" transform="rotate(90,525,300)">SHIELDS NOMINAL</text>
       </svg>
 
-      {/* Radar sweep */}
-      <div className="torpedo-sweep" />
+      {/* Cyborg pilot silhouette at bottom */}
+      <svg className="cyborg-pilot" viewBox="0 0 200 160" preserveAspectRatio="xMidYMax meet">
+        {/* Chair base */}
+        <rect x="60" y="140" width="80" height="10" rx="3" fill="rgba(0,255,255,0.08)" stroke="rgba(0,255,255,0.15)" strokeWidth="1" />
+        {/* Seat back */}
+        <path d="M70,140 L65,90 Q65,80 75,80 L125,80 Q135,80 135,90 L130,140" fill="rgba(0,255,255,0.05)" stroke="rgba(0,255,255,0.12)" strokeWidth="1" />
+        {/* Body */}
+        <line x1="100" y1="75" x2="100" y2="120" stroke="rgba(0,255,255,0.2)" strokeWidth="5" strokeLinecap="round" />
+        {/* Head — elongated alien */}
+        <ellipse cx="100" cy="55" rx="14" ry="20" fill="rgba(0,255,255,0.1)" stroke="rgba(0,255,255,0.2)" strokeWidth="1" />
+        {/* Eyes — large, glowing */}
+        <ellipse cx="93" cy="50" rx="6" ry="4" fill="rgba(255,0,200,0.3)" className="alien-eye-glow" />
+        <ellipse cx="107" cy="50" rx="6" ry="4" fill="rgba(255,0,200,0.3)" className="alien-eye-glow" />
+        <ellipse cx="93" cy="50" rx="3" ry="2" fill="rgba(255,0,200,0.7)" />
+        <ellipse cx="107" cy="50" rx="3" ry="2" fill="rgba(255,0,200,0.7)" />
+        {/* Arms reaching to controls */}
+        <line x1="90" y1="85" x2="55" y2="105" stroke="rgba(0,255,255,0.15)" strokeWidth="3" strokeLinecap="round" />
+        <line x1="110" y1="85" x2="145" y2="105" stroke="rgba(0,255,255,0.15)" strokeWidth="3" strokeLinecap="round" />
+        {/* Hands on controls */}
+        <circle cx="55" cy="105" r="4" fill="rgba(0,255,255,0.1)" stroke="rgba(0,255,255,0.2)" strokeWidth="1" />
+        <circle cx="145" cy="105" r="4" fill="rgba(0,255,255,0.1)" stroke="rgba(0,255,255,0.2)" strokeWidth="1" />
+        {/* Legs */}
+        <line x1="95" y1="120" x2="85" y2="145" stroke="rgba(0,255,255,0.12)" strokeWidth="3" strokeLinecap="round" />
+        <line x1="105" y1="120" x2="115" y2="145" stroke="rgba(0,255,255,0.12)" strokeWidth="3" strokeLinecap="round" />
+        {/* Cybernetic implants — lines on head */}
+        <line x1="86" y1="42" x2="78" y2="38" stroke="rgba(0,255,255,0.3)" strokeWidth="1" />
+        <line x1="114" y1="42" x2="122" y2="38" stroke="rgba(0,255,255,0.3)" strokeWidth="1" />
+        <circle cx="78" cy="38" r="2" fill="rgba(0,255,255,0.5)" className="node-pulse" />
+        <circle cx="122" cy="38" r="2" fill="rgba(0,255,255,0.5)" className="node-pulse" />
+        {/* Spine glow */}
+        <line x1="100" y1="75" x2="100" y2="40" stroke="rgba(255,0,200,0.15)" strokeWidth="1" strokeDasharray="2 3" />
+      </svg>
 
-      {/* HUD data bars */}
-      <div className="torpedo-hud-top">
-        <span className="torpedo-rec">● REC</span>
-        <span className="torpedo-label">NIGHT VISION · BINOCULAR FEED</span>
-        <span className="torpedo-data">TGT {route.id}</span>
+      {/* Holographic display panels — left */}
+      <div className="holo-panel holo-left">
+        <div className="holo-title">PLANETARY DATA</div>
+        <div className="holo-row"><span>MASS</span><span className="holo-val">5.97×10²⁴</span></div>
+        <div className="holo-row"><span>GRAV</span><span className="holo-val">9.81 m/s²</span></div>
+        <div className="holo-row"><span>ATM</span><span className="holo-val">N₂/O₂</span></div>
+        <div className="holo-row"><span>TEMP</span><span className="holo-val">295K</span></div>
+        <div className="holo-bar"><div className="holo-bar-fill holo-bar-1" /></div>
+        <div className="holo-row"><span>FUEL</span><span className="holo-val">73%</span></div>
+        <div className="holo-bar"><div className="holo-bar-fill holo-bar-2" /></div>
       </div>
 
-      {/* Side HUD panels */}
-      <div className="nvg-side-hud nvg-side-left">
-        <div className="nvg-readout">PWR<br/>87%</div>
-        <div className="nvg-bar-v"><div className="nvg-bar-fill" style={{height:'87%'}} /></div>
-        <div className="nvg-readout">GAIN<br/>+4.2</div>
-        <div className="nvg-bar-v"><div className="nvg-bar-fill" style={{height:'65%'}} /></div>
-        <div className="nvg-readout">IR</div>
-      </div>
-      <div className="nvg-side-hud nvg-side-right">
-        <div className="nvg-readout">RNG<br/>1.4mi</div>
-        <div className="nvg-bar-v"><div className="nvg-bar-fill" style={{height:'45%'}} /></div>
-        <div className="nvg-readout">MAG<br/>12x</div>
-        <div className="nvg-bar-v"><div className="nvg-bar-fill" style={{height:'72%'}} /></div>
-        <div className="nvg-readout">BAT</div>
+      {/* Holographic display panels — right */}
+      <div className="holo-panel holo-right">
+        <div className="holo-title">LANDING SEQ</div>
+        <div className="holo-row"><span>ALT</span><span className="holo-val alien-descent">12,400 ft</span></div>
+        <div className="holo-row"><span>VEL</span><span className="holo-val">MACH 0.3</span></div>
+        <div className="holo-row"><span>ANG</span><span className="holo-val">-4.2°</span></div>
+        <div className="holo-row"><span>ETA</span><span className="holo-val alien-blink">00:03</span></div>
+        <div className="holo-bar"><div className="holo-bar-fill holo-bar-3" /></div>
+        <div className="holo-row"><span>SHLD</span><span className="holo-val">ACTIVE</span></div>
+        <div className="holo-bar"><div className="holo-bar-fill holo-bar-4" /></div>
       </div>
 
-      {/* Route target card */}
-      <div className="torpedo-target-card">
-        <div className="torpedo-card-border" />
-        <div className="torpedo-card-inner">
-          <div className="torpedo-card-header">
-            <span className="torpedo-lock-icon">◎</span>
-            <span>TARGET ACQUIRED</span>
-          </div>
-          <div className="torpedo-card-color" style={{ background: route.color }} />
-          <div className="torpedo-card-name">{route.name}</div>
-          <div className="torpedo-card-stats">
+      {/* HUD top bar */}
+      <div className="alien-hud-top">
+        <span className="alien-blink">◆ LIVE FEED</span>
+        <span className="alien-title">CYBORG NAVIGATION SYSTEM v7.2.1</span>
+        <span className="alien-data">SECTOR {route.id}-ALPHA</span>
+      </div>
+
+      {/* Landing target card */}
+      <div className="alien-target-card">
+        <div className="alien-card-glow" />
+        <div className="alien-card-inner">
+          <div className="alien-card-header">◇ LANDING ZONE CONFIRMED ◇</div>
+          <div className="alien-card-color" style={{ background: route.color, boxShadow: `0 0 12px ${route.color}` }} />
+          <div className="alien-card-name">{route.name}</div>
+          <div className="alien-card-stats">
             <span>{route.distance} MI</span>
-            <span>·</span>
+            <span>•</span>
             <span>{route.duration}</span>
-            <span>·</span>
+            <span>•</span>
             <span>{route.type.toUpperCase()}</span>
           </div>
-          <div className="torpedo-card-coords">
-            {getRouteCenter(route.coords)[0].toFixed(4)}°N {Math.abs(getRouteCenter(route.coords)[1]).toFixed(4)}°W
-          </div>
+          <div className="alien-card-coords">{center[0].toFixed(4)}°N · {Math.abs(center[1]).toFixed(4)}°W</div>
         </div>
       </div>
 
       {/* Bottom HUD */}
-      <div className="torpedo-hud-bottom">
-        <span className="torpedo-data">LAT {getRouteCenter(route.coords)[0].toFixed(4)}</span>
-        <span className="torpedo-lock-text">◉ LOCK CONFIRMED</span>
-        <span className="torpedo-data">LON {getRouteCenter(route.coords)[1].toFixed(4)}</span>
+      <div className="alien-hud-bottom">
+        <span className="alien-data">LAT {center[0].toFixed(4)}</span>
+        <span className="alien-lock">◈ TOUCHDOWN IMMINENT ◈</span>
+        <span className="alien-data">LON {center[1].toFixed(4)}</span>
       </div>
     </div>
   );

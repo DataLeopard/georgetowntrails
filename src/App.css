@@ -453,9 +453,9 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
   overflow: hidden;
 }
 
-/* Green night-vision tint on overview map tiles */
+/* Alien cyan tint on overview map tiles */
 .scope-panel .leaflet-container {
-  filter: hue-rotate(80deg) saturate(0.6) brightness(0.7) contrast(1.3);
+  filter: hue-rotate(160deg) saturate(0.7) brightness(0.6) contrast(1.4);
 }
 
 /* Full overlay container */
@@ -497,9 +497,9 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
   left: 0;
   width: 100%;
   height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(0,255,65,0.3), transparent);
+  background: linear-gradient(90deg, transparent, rgba(0,255,255,0.3), transparent);
   animation: scopeScan 3s linear infinite;
-  box-shadow: 0 0 8px rgba(0,255,65,0.2);
+  box-shadow: 0 0 8px rgba(0,255,255,0.2);
 }
 
 @keyframes scopeScan {
@@ -521,8 +521,8 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
   font-family: 'Courier New', 'Consolas', monospace;
   font-size: 0.65rem;
   font-weight: 700;
-  color: rgba(0,255,65,0.7);
-  text-shadow: 0 0 6px rgba(0,255,65,0.4);
+  color: rgba(0,255,255,0.7);
+  text-shadow: 0 0 6px rgba(0,255,255,0.4);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -542,15 +542,15 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
   font-family: 'Courier New', monospace;
   font-size: 0.6rem;
   font-weight: 700;
-  color: rgba(0,255,65,0.6);
-  text-shadow: 0 0 4px rgba(0,255,65,0.3);
+  color: rgba(0,255,255,0.6);
+  text-shadow: 0 0 4px rgba(0,255,255,0.3);
 }
 
 .scope-hud-left { left: 10px; }
 .scope-hud-right { right: 10px; }
 
 .scope-data {
-  color: rgba(0,255,65,0.7);
+  color: rgba(0,255,255,0.7);
   letter-spacing: 0.08em;
 }
 
@@ -560,9 +560,9 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
 }
 
 .scope-label-pulse {
-  color: rgba(255,200,60,0.9);
+  color: rgba(255,100,200,0.9);
   animation: hudPulse 1.5s ease-in-out infinite;
-  text-shadow: 0 0 8px rgba(255,200,60,0.5);
+  text-shadow: 0 0 8px rgba(255,100,200,0.5);
 }
 
 @keyframes hudBlink {
@@ -578,7 +578,7 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
 .scope-rangebar {
   width: 3px;
   height: 40px;
-  background: linear-gradient(180deg, rgba(0,255,65,0.6), rgba(0,255,65,0.1));
+  background: linear-gradient(180deg, rgba(0,255,255,0.6), rgba(0,255,255,0.1));
   border-radius: 2px;
   margin-top: 4px;
 }
@@ -599,11 +599,11 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
   position: absolute;
   inset: 0;
   background: linear-gradient(180deg,
-    rgba(0,255,65,0.1),
-    rgba(0,255,65,0.6) 20%,
-    rgba(0,255,65,0.8) 50%,
-    rgba(0,255,65,0.6) 80%,
-    rgba(0,255,65,0.1)
+    rgba(0,255,255,0.1),
+    rgba(0,255,255,0.6) 20%,
+    rgba(0,255,255,0.8) 50%,
+    rgba(0,255,255,0.6) 80%,
+    rgba(0,255,255,0.1)
   );
 }
 
@@ -616,9 +616,9 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
   height: 100%;
   background: linear-gradient(180deg,
     transparent,
-    rgba(0,255,65,0.08) 20%,
-    rgba(0,255,65,0.12) 50%,
-    rgba(0,255,65,0.08) 80%,
+    rgba(0,255,255,0.08) 20%,
+    rgba(0,255,255,0.12) 50%,
+    rgba(0,255,255,0.08) 80%,
     transparent
   );
 }
@@ -629,8 +629,8 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
   transform: translateX(-50%);
   width: 16px;
   height: 3px;
-  background: rgba(0,255,65,0.8);
-  box-shadow: 0 0 8px rgba(0,255,65,0.5);
+  background: rgba(0,255,255,0.8);
+  box-shadow: 0 0 8px rgba(0,255,255,0.5);
 }
 
 .divider-notch-top { top: 20%; }
@@ -646,13 +646,13 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
   font-family: 'Courier New', monospace;
   font-size: 0.55rem;
   font-weight: 700;
-  color: rgba(0,255,65,0.6);
+  color: rgba(0,255,255,0.6);
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  text-shadow: 0 0 6px rgba(0,255,65,0.4);
+  text-shadow: 0 0 6px rgba(0,255,255,0.4);
   background: rgba(0,0,0,0.8);
   padding: 2px 8px;
-  border: 1px solid rgba(0,255,65,0.3);
+  border: 1px solid rgba(0,255,255,0.3);
 }
 
 /* ── Comic book styling ──────────────────────────────────── */
@@ -791,9 +791,9 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
   display: block;
 }
 
-/* ── Detail map HUD (left panel in split) ───────────────── */
+/* ── Detail map HUD (left panel in split) — Alien theme ── */
 .detail-map-wrapper.split-active .leaflet-container {
-  filter: hue-rotate(80deg) saturate(0.5) brightness(0.75) contrast(1.2);
+  filter: hue-rotate(160deg) saturate(0.5) brightness(0.7) contrast(1.3);
 }
 
 .detail-hud-overlay {
@@ -837,8 +837,8 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
   font-family: 'Courier New', monospace;
   font-size: 0.6rem;
   font-weight: 700;
-  color: rgba(0,255,65,0.6);
-  text-shadow: 0 0 4px rgba(0,255,65,0.3);
+  color: rgba(0,255,255,0.6);
+  text-shadow: 0 0 4px rgba(0,255,255,0.3);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -846,8 +846,8 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
 .detail-hud-top { top: 0; }
 .detail-hud-bottom { bottom: 0; }
 
-/* ── Submarine Torpedo Targeting Reveal ──────────────────── */
-.torpedo-overlay {
+/* ── Alien Cyborg Spaceship Dashboard Reveal ─────────────── */
+.alien-overlay {
   position: fixed;
   inset: 0;
   z-index: 9999;
@@ -855,481 +855,393 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
   overflow: hidden;
 }
 
-/* Phase animations */
-.torpedo-overlay.torpedo-enter {
-  animation: torpedoFadeIn 0.3s ease forwards;
+/* Phase transitions */
+.alien-overlay.alien-warp {
+  animation: alienFadeIn 0.3s ease forwards;
 }
+.alien-overlay.alien-warp .warp-tunnel { opacity: 1; }
+.alien-overlay.alien-warp .hex-grid { opacity: 0; transform: translate(-50%,-50%) scale(3); }
+.alien-overlay.alien-warp .alien-target-card { opacity: 0; }
 
-.torpedo-overlay.torpedo-zoom {
-  animation: none;
+.alien-overlay.alien-approach .warp-tunnel { opacity: 0; transition: opacity 0.4s; }
+.alien-overlay.alien-approach .hex-grid {
   opacity: 1;
+  transform: translate(-50%,-50%) scale(1);
+  transition: all 0.6s cubic-bezier(0.16,1,0.3,1);
 }
 
-.torpedo-overlay.torpedo-zoom .torpedo-scope {
-  animation: binoZoomIn 0.6s ease forwards;
+.alien-overlay.alien-scan .alien-nebula { animation: nebulaFlare 0.8s ease; }
+
+.alien-overlay.alien-land .alien-target-card {
+  opacity: 1;
+  animation: alienCardIn 0.5s ease both;
 }
 
-.torpedo-overlay.torpedo-lock .torpedo-bullseye,
-.torpedo-overlay.torpedo-lock .torpedo-dot-pulse {
-  animation: torpedoLockPulse 0.3s ease 4;
+.alien-overlay.alien-exit {
+  animation: alienFadeOut 0.4s ease forwards;
 }
 
-.torpedo-overlay.torpedo-flash .nvg-flash {
-  animation: nvgFlashBang 0.2s ease;
+@keyframes alienFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
-.torpedo-overlay.torpedo-exit {
-  animation: torpedoFadeOut 0.4s ease forwards;
+@keyframes alienFadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
 }
 
-/* Deep night-vision BG */
-.torpedo-bg {
+/* Deep space background */
+.alien-space {
   position: absolute;
   inset: 0;
   background: radial-gradient(
-    ellipse at center,
-    #0d1f0d 0%,
-    #071207 30%,
-    #030903 60%,
-    #010301 100%
+    ellipse at 40% 40%,
+    #0a0015 0%,
+    #050010 30%,
+    #02000a 60%,
+    #000005 100%
   );
 }
 
-/* Binocular mask — figure-eight shape */
-.bino-mask {
+/* Nebula glow */
+.alien-nebula {
   position: absolute;
   inset: 0;
-  z-index: 20;
-  pointer-events: none;
   background:
-    radial-gradient(ellipse 42% 70% at 32% 50%, transparent 95%, rgba(0,0,0,0.95) 100%),
-    radial-gradient(ellipse 42% 70% at 68% 50%, transparent 95%, rgba(0,0,0,0.95) 100%);
-  mask-image:
-    radial-gradient(ellipse 42% 70% at 32% 50%, black 95%, transparent 100%),
-    radial-gradient(ellipse 42% 70% at 68% 50%, black 95%, transparent 100%);
-  mask-composite: add;
-  -webkit-mask-image:
-    radial-gradient(ellipse 42% 70% at 32% 50%, black 95%, transparent 100%),
-    radial-gradient(ellipse 42% 70% at 68% 50%, black 95%, transparent 100%);
-  -webkit-mask-composite: source-over;
-}
-
-/* Actually, use an inverse approach: black everywhere except two circles */
-.bino-mask {
-  background: rgba(0,0,0,0.97);
-  mask-image:
-    radial-gradient(ellipse 40% 65% at 33% 50%, transparent 92%, black 100%),
-    radial-gradient(ellipse 40% 65% at 67% 50%, transparent 92%, black 100%);
-  mask-composite: subtract;
-  -webkit-mask-image:
-    radial-gradient(ellipse 40% 65% at 33% 50%, transparent 92%, black 100%),
-    radial-gradient(ellipse 40% 65% at 67% 50%, transparent 92%, black 100%);
-  -webkit-mask-composite: destination-out;
-}
-
-/* CRT horizontal scanlines */
-.crt-lines {
-  position: absolute;
-  inset: 0;
-  z-index: 15;
+    radial-gradient(ellipse at 30% 30%, rgba(100,0,200,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 60%, rgba(0,150,255,0.06) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 80%, rgba(255,0,150,0.05) 0%, transparent 30%);
   pointer-events: none;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0,0,0,0.15) 2px,
-    rgba(0,0,0,0.15) 4px
-  );
-  animation: crtFlicker 0.08s infinite;
 }
 
-@keyframes crtFlicker {
-  0%   { opacity: 0.8; }
-  50%  { opacity: 1; }
-  100% { opacity: 0.85; }
+@keyframes nebulaFlare {
+  0%   { opacity: 1; }
+  50%  { opacity: 1; filter: brightness(3); }
+  100% { opacity: 1; filter: brightness(1); }
 }
 
-/* NVG white flash on target lock */
-.nvg-flash {
+/* Stars */
+.alien-stars {
   position: absolute;
   inset: 0;
-  background: rgba(0,255,65,0.15);
-  z-index: 18;
-  pointer-events: none;
-  opacity: 0;
+  z-index: 1;
 }
 
-@keyframes nvgFlashBang {
-  0%   { opacity: 0; background: rgba(255,255,255,0.8); }
-  30%  { opacity: 1; background: rgba(0,255,65,0.4); }
-  100% { opacity: 0; background: rgba(0,255,65,0); }
-}
-
-/* Binocular zoom-in animation */
-@keyframes binoZoomIn {
-  from { transform: translate(-50%, -50%) scale(1.6); opacity: 0.3; }
-  to   { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-}
-
-/* Static noise grain overlay */
-.torpedo-noise {
+.alien-star {
   position: absolute;
-  inset: 0;
-  opacity: 0.06;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
-  background-size: 256px;
-  mix-blend-mode: overlay;
-}
-
-/* Sonar ping rings */
-.sonar-ping {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   border-radius: 50%;
-  border: 2px solid rgba(0,255,65,0.3);
-  animation: sonarExpand 3s ease-out infinite;
+  animation: alienStarTwinkle 2s ease-in-out infinite alternate;
 }
 
-.sonar-ping-1 { width: 80px; height: 80px; animation-delay: 0s; }
-.sonar-ping-2 { width: 80px; height: 80px; animation-delay: 1s; }
-.sonar-ping-3 { width: 80px; height: 80px; animation-delay: 2s; }
-
-@keyframes sonarExpand {
-  0%   { width: 80px; height: 80px; opacity: 0.6; border-color: rgba(0,255,65,0.5); }
-  100% { width: 600px; height: 600px; opacity: 0; border-color: rgba(0,255,65,0); }
+@keyframes alienStarTwinkle {
+  from { opacity: 0.2; transform: scale(0.8); }
+  to   { opacity: 1; transform: scale(1.2); }
 }
 
-/* Main targeting scope */
-.torpedo-scope {
+/* Warp speed lines */
+.warp-tunnel {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  transition: opacity 0.4s;
+}
+
+.warp-line {
+  position: absolute;
+  width: 2px;
+  height: 80px;
+  background: linear-gradient(180deg, transparent, rgba(0,255,255,0.6), rgba(180,100,255,0.4), transparent);
+  animation: warpStreak 0.6s linear infinite;
+  border-radius: 50%;
+}
+
+@keyframes warpStreak {
+  from { transform: translateY(-100px) scaleY(0.5); opacity: 0; }
+  50%  { opacity: 1; }
+  to   { transform: translateY(100vh) scaleY(2); opacity: 0; }
+}
+
+/* Hexagonal HUD grid */
+.hex-grid {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: min(85vw, 85vh);
-  height: min(85vw, 85vh);
+  width: min(80vw, 80vh);
+  height: min(80vw, 80vh);
   transform: translate(-50%, -50%);
+  z-index: 5;
+  transition: all 0.6s cubic-bezier(0.16,1,0.3,1);
 }
 
-.torpedo-ring-spin {
-  transform-origin: 250px 250px;
-  animation: torpedoSpin 8s linear infinite;
+.hex-spin {
+  transform-origin: 300px 300px;
+  animation: hexRotate 20s linear infinite;
 }
 
-.torpedo-ring-spin-rev {
-  transform-origin: 250px 250px;
-  animation: torpedoSpin 12s linear infinite reverse;
+.hex-spin-rev {
+  transform-origin: 300px 300px;
+  animation: hexRotate 30s linear infinite reverse;
 }
 
-@keyframes torpedoSpin {
+@keyframes hexRotate {
   to { transform: rotate(360deg); }
 }
 
-.torpedo-bullseye {
-  animation: torpedoBullseyePulse 1s ease-in-out infinite alternate;
+.alien-eye-pulse {
+  animation: alienEyePulse 1.5s ease-in-out infinite alternate;
 }
 
-@keyframes torpedoBullseyePulse {
-  from { stroke: rgba(255,60,60,0.4); r: 28; }
-  to   { stroke: rgba(255,60,60,0.8); r: 32; }
+@keyframes alienEyePulse {
+  from { stroke: rgba(0,255,255,0.3); r: 38; }
+  to   { stroke: rgba(0,255,255,0.6); r: 42; }
 }
 
-.torpedo-dot-pulse {
-  animation: torpedoDotPulse 0.6s ease-in-out infinite alternate;
+.alien-core-pulse {
+  animation: alienCorePulse 0.8s ease-in-out infinite alternate;
 }
 
-@keyframes torpedoDotPulse {
-  from { r: 4; fill: rgba(255,60,60,0.7); }
-  to   { r: 7; fill: rgba(255,60,60,1); }
+@keyframes alienCorePulse {
+  from { r: 4; fill: rgba(255,0,200,0.6); }
+  to   { r: 7; fill: rgba(255,0,200,1); }
 }
 
-.torpedo-diamond-pulse {
-  animation: torpedoDiamondPulse 1.5s ease-in-out infinite alternate;
+.node-pulse {
+  animation: nodePulse 1.5s ease-in-out infinite alternate;
 }
 
-@keyframes torpedoDiamondPulse {
-  from { stroke: rgba(255,60,60,0.2); }
-  to   { stroke: rgba(255,60,60,0.6); }
+@keyframes nodePulse {
+  from { r: 5; opacity: 0.3; }
+  to   { r: 8; opacity: 0.8; }
 }
 
-.torpedo-text-blink {
-  animation: hudBlink 1s step-end infinite;
+/* Cyborg pilot */
+.cyborg-pilot {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 160px;
+  z-index: 4;
+  opacity: 0.7;
 }
 
-/* Radar sweep line */
-.torpedo-sweep {
+.alien-eye-glow {
+  animation: eyeGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes eyeGlow {
+  from { fill: rgba(255,0,200,0.2); }
+  to   { fill: rgba(255,0,200,0.5); }
+}
+
+/* Holographic side panels */
+.holo-panel {
   position: absolute;
   top: 50%;
-  left: 50%;
-  width: 50%;
-  height: 2px;
-  transform-origin: 0 0;
-  background: linear-gradient(90deg, rgba(0,255,65,0.6), transparent);
-  animation: torpedoSweep 3s linear infinite;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 120px;
+  padding: 10px 8px;
+  background: rgba(0,10,30,0.6);
+  border: 1px solid rgba(0,255,255,0.2);
+  border-radius: 4px;
+  backdrop-filter: blur(4px);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-@keyframes torpedoSweep {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+.holo-left { left: 12px; }
+.holo-right { right: 12px; }
+
+.holo-title {
+  font-family: 'Courier New', monospace;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: rgba(0,255,255,0.8);
+  text-align: center;
+  letter-spacing: 0.15em;
+  text-shadow: 0 0 6px rgba(0,255,255,0.4);
+  border-bottom: 1px solid rgba(0,255,255,0.2);
+  padding-bottom: 4px;
 }
 
-/* HUD top bar */
-.torpedo-hud-top,
-.torpedo-hud-bottom {
+.holo-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Courier New', monospace;
+  font-size: 0.5rem;
+  color: rgba(0,255,255,0.5);
+  letter-spacing: 0.05em;
+}
+
+.holo-val {
+  color: rgba(180,100,255,0.8);
+  text-shadow: 0 0 4px rgba(180,100,255,0.3);
+}
+
+.holo-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(0,255,255,0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.holo-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 1s ease;
+}
+
+.holo-bar-1 { width: 73%; background: linear-gradient(90deg, rgba(0,255,255,0.6), rgba(180,100,255,0.4)); }
+.holo-bar-2 { width: 73%; background: linear-gradient(90deg, rgba(0,200,100,0.6), rgba(0,255,255,0.3)); }
+.holo-bar-3 { width: 45%; background: linear-gradient(90deg, rgba(255,100,200,0.6), rgba(180,100,255,0.4)); }
+.holo-bar-4 { width: 98%; background: linear-gradient(90deg, rgba(0,255,255,0.7), rgba(0,200,100,0.5)); }
+
+.alien-descent {
+  animation: descCount 3s linear;
+}
+
+.alien-blink {
+  animation: alienBlink 1s step-end infinite;
+}
+
+@keyframes alienBlink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0.2; }
+}
+
+/* HUD top/bottom bars */
+.alien-hud-top,
+.alien-hud-bottom {
   position: absolute;
   left: 0;
   right: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 20px;
-  font-family: 'Courier New', 'Consolas', monospace;
-  font-size: 0.7rem;
+  padding: 10px 20px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.65rem;
   font-weight: 700;
-  color: rgba(0,255,65,0.7);
-  text-shadow: 0 0 8px rgba(0,255,65,0.5);
+  color: rgba(0,255,255,0.6);
+  text-shadow: 0 0 6px rgba(0,255,255,0.3);
   letter-spacing: 0.12em;
   text-transform: uppercase;
+  z-index: 12;
 }
 
-.torpedo-hud-top { top: 0; }
-.torpedo-hud-bottom { bottom: 0; }
+.alien-hud-top { top: 0; }
+.alien-hud-bottom { bottom: 0; }
 
-.torpedo-rec {
-  color: rgba(255,60,60,0.9);
-  animation: hudBlink 1s step-end infinite;
+.alien-title {
+  color: rgba(0,255,255,0.4);
+  font-size: 0.6rem;
 }
 
-.torpedo-label {
-  color: rgba(0,255,65,0.5);
-  font-size: 0.65rem;
-}
-
-.torpedo-data {
-  color: rgba(0,255,65,0.7);
+.alien-data {
+  color: rgba(0,255,255,0.6);
   letter-spacing: 0.08em;
 }
 
-.torpedo-lock-text {
-  color: rgba(255,200,60,0.9);
-  animation: hudPulse 1.5s ease-in-out infinite;
-  text-shadow: 0 0 12px rgba(255,200,60,0.5);
-  font-size: 0.8rem;
+.alien-lock {
+  color: rgba(255,100,200,0.9);
+  animation: alienLockPulse 1.2s ease-in-out infinite;
+  text-shadow: 0 0 12px rgba(255,100,200,0.5);
+  font-size: 0.75rem;
 }
 
-/* Target info card */
-.torpedo-target-card {
+@keyframes alienLockPulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* Target landing card */
+.alien-target-card {
   position: absolute;
-  bottom: 14%;
+  bottom: 18%;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 10;
-  animation: torpedoCardIn 0.5s 0.3s ease both;
+  z-index: 15;
+  opacity: 0;
+  transition: opacity 0.3s;
 }
 
-.torpedo-card-border {
+.alien-card-glow {
   position: absolute;
-  inset: -3px;
-  border: 2px solid rgba(0,255,65,0.5);
-  border-radius: 6px;
+  inset: -4px;
+  border: 2px solid rgba(0,255,255,0.4);
+  border-radius: 8px;
   box-shadow:
-    0 0 12px rgba(0,255,65,0.2),
-    inset 0 0 12px rgba(0,255,65,0.05);
+    0 0 20px rgba(0,255,255,0.15),
+    0 0 40px rgba(180,100,255,0.08),
+    inset 0 0 15px rgba(0,255,255,0.05);
+  animation: cardGlowPulse 2s ease-in-out infinite alternate;
 }
 
-.torpedo-card-inner {
-  background: rgba(0,15,0,0.9);
-  border: 1px solid rgba(0,255,65,0.3);
-  border-radius: 4px;
-  padding: 12px 28px;
+@keyframes cardGlowPulse {
+  from { box-shadow: 0 0 20px rgba(0,255,255,0.1), 0 0 40px rgba(180,100,255,0.05); }
+  to   { box-shadow: 0 0 30px rgba(0,255,255,0.25), 0 0 60px rgba(180,100,255,0.12); }
+}
+
+.alien-card-inner {
+  background: rgba(5,5,20,0.92);
+  border: 1px solid rgba(0,255,255,0.25);
+  border-radius: 6px;
+  padding: 14px 32px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
+  backdrop-filter: blur(8px);
 }
 
-.torpedo-card-header {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.alien-card-header {
   font-family: 'Courier New', monospace;
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   font-weight: 700;
-  color: rgba(255,200,60,0.9);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  text-shadow: 0 0 6px rgba(255,200,60,0.4);
+  color: rgba(255,100,200,0.9);
+  letter-spacing: 0.2em;
+  text-shadow: 0 0 8px rgba(255,100,200,0.4);
 }
 
-.torpedo-lock-icon {
-  animation: hudPulse 1s ease-in-out infinite;
-}
-
-.torpedo-card-color {
+.alien-card-color {
   width: 100%;
   height: 3px;
   border-radius: 2px;
-  opacity: 0.8;
 }
 
-.torpedo-card-name {
+.alien-card-name {
   font-family: 'Courier New', monospace;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 700;
-  color: rgba(0,255,65,0.9);
-  letter-spacing: 2px;
+  color: rgba(0,255,255,0.95);
+  letter-spacing: 3px;
   text-transform: uppercase;
-  text-shadow: 0 0 10px rgba(0,255,65,0.5);
+  text-shadow: 0 0 12px rgba(0,255,255,0.5);
 }
 
-.torpedo-card-stats {
+.alien-card-stats {
   display: flex;
   gap: 8px;
   font-family: 'Courier New', monospace;
   font-size: 0.7rem;
-  color: rgba(0,255,65,0.6);
+  color: rgba(180,100,255,0.7);
   letter-spacing: 0.1em;
 }
 
-.torpedo-card-coords {
-  font-family: 'Courier New', monospace;
-  font-size: 0.6rem;
-  color: rgba(0,255,65,0.4);
-  letter-spacing: 0.08em;
-}
-
-/* ── Soldier silhouettes ─────────────────────────────────── */
-.soldier-layer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 25%;
-  z-index: 8;
-  pointer-events: none;
-}
-
-.soldier-1 {
-  animation: soldierWalk1 4s linear infinite;
-}
-
-.soldier-2 {
-  animation: soldierWalk2 6s linear infinite;
-}
-
-.soldier-3 {
-  animation: soldierCrawl 5s linear infinite;
-}
-
-@keyframes soldierWalk1 {
-  from { transform: translateX(-100px); }
-  to   { transform: translateX(1100px); }
-}
-
-@keyframes soldierWalk2 {
-  from { transform: translateX(1100px); }
-  to   { transform: translateX(-100px); }
-}
-
-@keyframes soldierCrawl {
-  from { transform: translateX(-150px); }
-  to   { transform: translateX(1150px); }
-}
-
-/* ── Heartbeat monitor ───────────────────────────────────── */
-.heartbeat-container {
-  position: absolute;
-  bottom: 6%;
-  left: 5%;
-  width: 25%;
-  height: 30px;
-  z-index: 12;
-  opacity: 0.6;
-}
-
-.heartbeat-svg {
-  width: 100%;
-  height: 100%;
-}
-
-.heartbeat-line {
-  stroke-dasharray: 600;
-  stroke-dashoffset: 600;
-  animation: heartbeatDraw 2s linear infinite;
-}
-
-@keyframes heartbeatDraw {
-  to { stroke-dashoffset: 0; }
-}
-
-/* ── NVG Side HUD panels ────────────────────────────────── */
-.nvg-side-hud {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 12;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 4px;
-  background: rgba(0,10,0,0.5);
-  border: 1px solid rgba(0,255,65,0.2);
-  border-radius: 4px;
-}
-
-.nvg-side-left { left: 10px; }
-.nvg-side-right { right: 10px; }
-
-.nvg-readout {
+.alien-card-coords {
   font-family: 'Courier New', monospace;
   font-size: 0.55rem;
-  font-weight: 700;
-  color: rgba(0,255,65,0.6);
-  text-align: center;
-  text-shadow: 0 0 4px rgba(0,255,65,0.3);
+  color: rgba(0,255,255,0.4);
   letter-spacing: 0.1em;
-  line-height: 1.2;
 }
 
-.nvg-bar-v {
-  width: 6px;
-  height: 30px;
-  background: rgba(0,255,65,0.1);
-  border: 1px solid rgba(0,255,65,0.2);
-  border-radius: 2px;
-  position: relative;
-  overflow: hidden;
-}
-
-.nvg-bar-fill {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: linear-gradient(0deg, rgba(0,255,65,0.7), rgba(0,255,65,0.3));
-  border-radius: 1px;
-  transition: height 0.5s ease;
-}
-
-/* Animations */
-@keyframes torpedoFadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-@keyframes torpedoFadeOut {
-  from { opacity: 1; }
-  to   { opacity: 0; }
-}
-
-@keyframes torpedoLockPulse {
-  0%, 100% { r: 30; stroke: rgba(255,60,60,0.6); }
-  50%      { r: 35; stroke: rgba(255,60,60,1); }
-}
-
-@keyframes torpedoCardIn {
-  from { opacity: 0; transform: translateX(-50%) translateY(30px) scale(0.9); }
+@keyframes alienCardIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(40px) scale(0.85); }
   to   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
 }
 

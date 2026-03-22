@@ -298,30 +298,30 @@ export default function Map({ routes, activeRouteId, onRouteClick }) {
             {/* Minimal crosshair */}
             <svg className="detail-crosshair" viewBox="0 0 300 300" preserveAspectRatio="xMidYMid meet">
               {/* Thin crosshair lines */}
-              <line x1="150" y1="0" x2="150" y2="120" stroke="rgba(0,255,65,0.2)" strokeWidth="0.5" />
-              <line x1="150" y1="180" x2="150" y2="300" stroke="rgba(0,255,65,0.2)" strokeWidth="0.5" />
-              <line x1="0" y1="150" x2="120" y2="150" stroke="rgba(0,255,65,0.2)" strokeWidth="0.5" />
-              <line x1="180" y1="150" x2="300" y2="150" stroke="rgba(0,255,65,0.2)" strokeWidth="0.5" />
+              <line x1="150" y1="0" x2="150" y2="120" stroke="rgba(0,255,255,0.2)" strokeWidth="0.5" />
+              <line x1="150" y1="180" x2="150" y2="300" stroke="rgba(0,255,255,0.2)" strokeWidth="0.5" />
+              <line x1="0" y1="150" x2="120" y2="150" stroke="rgba(0,255,255,0.2)" strokeWidth="0.5" />
+              <line x1="180" y1="150" x2="300" y2="150" stroke="rgba(0,255,255,0.2)" strokeWidth="0.5" />
               {/* Small center circle */}
-              <circle cx="150" cy="150" r="40" fill="none" stroke="rgba(0,255,65,0.15)" strokeWidth="1" />
-              <circle cx="150" cy="150" r="3" fill="rgba(0,255,65,0.4)" />
+              <circle cx="150" cy="150" r="40" fill="none" stroke="rgba(0,255,255,0.15)" strokeWidth="1" />
+              <circle cx="150" cy="150" r="3" fill="rgba(0,255,255,0.4)" />
               {/* Corner brackets */}
-              <path d="M20,20 L20,50 M20,20 L50,20" fill="none" stroke="rgba(0,255,65,0.3)" strokeWidth="1.5" />
-              <path d="M280,20 L280,50 M280,20 L250,20" fill="none" stroke="rgba(0,255,65,0.3)" strokeWidth="1.5" />
-              <path d="M20,280 L20,250 M20,280 L50,280" fill="none" stroke="rgba(0,255,65,0.3)" strokeWidth="1.5" />
-              <path d="M280,280 L280,250 M280,280 L250,280" fill="none" stroke="rgba(0,255,65,0.3)" strokeWidth="1.5" />
+              <path d="M20,20 L20,50 M20,20 L50,20" fill="none" stroke="rgba(0,255,255,0.3)" strokeWidth="1.5" />
+              <path d="M280,20 L280,50 M280,20 L250,20" fill="none" stroke="rgba(0,255,255,0.3)" strokeWidth="1.5" />
+              <path d="M20,280 L20,250 M20,280 L50,280" fill="none" stroke="rgba(0,255,255,0.3)" strokeWidth="1.5" />
+              <path d="M280,280 L280,250 M280,280 L250,280" fill="none" stroke="rgba(0,255,255,0.3)" strokeWidth="1.5" />
             </svg>
 
             {/* HUD labels */}
             <div className="detail-hud-top">
-              <span className="scope-label-blink">● LIVE</span>
-              <span className="scope-data">DETAIL VIEW</span>
-              <span className="scope-data">NVG ON</span>
+              <span className="scope-label-blink">◆ ACTIVE</span>
+              <span className="scope-data">SURFACE SCAN</span>
+              <span className="scope-data">XENO-NAV</span>
             </div>
             <div className="detail-hud-bottom">
-              <span className="scope-data">GRID 4F-7A</span>
-              <span className="scope-label-pulse">◉ TRACKING</span>
-              <span className="scope-data">IR MODE</span>
+              <span className="scope-data">GRID 7G-4F</span>
+              <span className="scope-label-pulse">◈ DESCENDING</span>
+              <span className="scope-data">ALIEN VIEW</span>
             </div>
           </div>
         )}
@@ -346,17 +346,17 @@ export default function Map({ routes, activeRouteId, onRouteClick }) {
             {/* Crosshair SVG */}
             <svg className="scope-crosshair" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid meet">
               {/* Outer ring */}
-              <circle cx="200" cy="200" r="180" fill="none" stroke="rgba(0,255,65,0.35)" strokeWidth="2" />
-              <circle cx="200" cy="200" r="160" fill="none" stroke="rgba(0,255,65,0.15)" strokeWidth="1" strokeDasharray="8 6" />
-              <circle cx="200" cy="200" r="120" fill="none" stroke="rgba(0,255,65,0.2)" strokeWidth="1" />
-              <circle cx="200" cy="200" r="60" fill="none" stroke="rgba(0,255,65,0.3)" strokeWidth="1.5" />
+              <circle cx="200" cy="200" r="180" fill="none" stroke="rgba(0,255,255,0.35)" strokeWidth="2" />
+              <circle cx="200" cy="200" r="160" fill="none" stroke="rgba(0,255,255,0.15)" strokeWidth="1" strokeDasharray="8 6" />
+              <circle cx="200" cy="200" r="120" fill="none" stroke="rgba(0,255,255,0.2)" strokeWidth="1" />
+              <circle cx="200" cy="200" r="60" fill="none" stroke="rgba(0,255,255,0.3)" strokeWidth="1.5" />
               <circle cx="200" cy="200" r="6" fill="rgba(255,60,60,0.8)" />
 
               {/* Crosshair lines */}
-              <line x1="200" y1="10" x2="200" y2="140" stroke="rgba(0,255,65,0.4)" strokeWidth="1" />
-              <line x1="200" y1="260" x2="200" y2="390" stroke="rgba(0,255,65,0.4)" strokeWidth="1" />
-              <line x1="10" y1="200" x2="140" y2="200" stroke="rgba(0,255,65,0.4)" strokeWidth="1" />
-              <line x1="260" y1="200" x2="390" y2="200" stroke="rgba(0,255,65,0.4)" strokeWidth="1" />
+              <line x1="200" y1="10" x2="200" y2="140" stroke="rgba(0,255,255,0.4)" strokeWidth="1" />
+              <line x1="200" y1="260" x2="200" y2="390" stroke="rgba(0,255,255,0.4)" strokeWidth="1" />
+              <line x1="10" y1="200" x2="140" y2="200" stroke="rgba(0,255,255,0.4)" strokeWidth="1" />
+              <line x1="260" y1="200" x2="390" y2="200" stroke="rgba(0,255,255,0.4)" strokeWidth="1" />
 
               {/* Range tick marks */}
               {[0, 45, 90, 135, 180, 225, 270, 315].map(angle => {
@@ -365,14 +365,14 @@ export default function Map({ routes, activeRouteId, onRouteClick }) {
                 const y1 = 200 + 170 * Math.sin(rad);
                 const x2 = 200 + 185 * Math.cos(rad);
                 const y2 = 200 + 185 * Math.sin(rad);
-                return <line key={angle} x1={x1} y1={y1} x2={x2} y2={y2} stroke="rgba(0,255,65,0.5)" strokeWidth="2" />;
+                return <line key={angle} x1={x1} y1={y1} x2={x2} y2={y2} stroke="rgba(0,255,255,0.5)" strokeWidth="2" />;
               })}
 
               {/* Corner brackets */}
-              <path d="M30,30 L30,70 M30,30 L70,30" fill="none" stroke="rgba(0,255,65,0.5)" strokeWidth="2" />
-              <path d="M370,30 L370,70 M370,30 L330,30" fill="none" stroke="rgba(0,255,65,0.5)" strokeWidth="2" />
-              <path d="M30,370 L30,330 M30,370 L70,370" fill="none" stroke="rgba(0,255,65,0.5)" strokeWidth="2" />
-              <path d="M370,370 L370,330 M370,370 L330,370" fill="none" stroke="rgba(0,255,65,0.5)" strokeWidth="2" />
+              <path d="M30,30 L30,70 M30,30 L70,30" fill="none" stroke="rgba(0,255,255,0.5)" strokeWidth="2" />
+              <path d="M370,30 L370,70 M370,30 L330,30" fill="none" stroke="rgba(0,255,255,0.5)" strokeWidth="2" />
+              <path d="M30,370 L30,330 M30,370 L70,370" fill="none" stroke="rgba(0,255,255,0.5)" strokeWidth="2" />
+              <path d="M370,370 L370,330 M370,370 L330,370" fill="none" stroke="rgba(0,255,255,0.5)" strokeWidth="2" />
 
               {/* Diamond target indicator */}
               <polygon points="200,170 230,200 200,230 170,200" fill="none" stroke="rgba(255,60,60,0.5)" strokeWidth="1.5" />
@@ -384,13 +384,13 @@ export default function Map({ routes, activeRouteId, onRouteClick }) {
             {/* HUD data readouts */}
             <div className="scope-hud-top">
               <span className="scope-label-blink">● REC</span>
-              <span>TACTICAL OVERVIEW</span>
+              <span>ORBITAL OVERVIEW</span>
               <span className="scope-data">ZOOM 12x</span>
             </div>
 
             <div className="scope-hud-bottom">
               <span className="scope-data">LAT 30.6627</span>
-              <span className="scope-label-pulse">◉ TARGET LOCK</span>
+              <span className="scope-label-pulse">◈ PLANET LOCK</span>
               <span className="scope-data">LON -97.6779</span>
             </div>
 
