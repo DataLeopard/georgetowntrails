@@ -67,18 +67,15 @@ function TargetLockReveal({ route, onComplete }) {
       setTimeout(() => setPhase('scan'), 1200),
       setTimeout(() => setPhase('asteroids'), 1800),
       setTimeout(() => setPhase('explode'), 2600),
-      setTimeout(() => setPhase('heaven'), 3400),
-      setTimeout(() => setPhase('battle'), 4400),
-      setTimeout(() => setPhase('civilwar'), 5400),
-      setTimeout(() => setPhase('burns'), 6400),
-      setTimeout(() => setPhase('exit'), 7600),
-      setTimeout(() => onComplete(), 8000),
+      setTimeout(() => setPhase('battle'), 3400),
+      setTimeout(() => setPhase('civilwar'), 4400),
+      setTimeout(() => setPhase('exit'), 5400),
+      setTimeout(() => onComplete(), 5800),
     ];
     return () => timers.forEach(clearTimeout);
   }, [onComplete]);
 
   const center = getRouteCenter(route.coords);
-  const tileUrl = getTileUrl(center[0], center[1], 15);
 
   return (
     <div className={`alien-overlay alien-${phase}`}>
@@ -254,55 +251,7 @@ function TargetLockReveal({ route, onComplete }) {
         <div className="explosion-text">DIRECT HIT</div>
       </div>
 
-      {/* ═══ PHASE 6: HEAVEN'S DOOR — angel knocking ═══ */}
-      <div className="heaven-layer">
-        <div className="heaven-light" />
-        <div className="heaven-clouds">
-          {Array.from({ length: 6 }, (_, i) => (
-            <div key={i} className="heaven-cloud" style={{
-              left: `${-10 + i * 20}%`,
-              top: `${60 + Math.random() * 30}%`,
-              animationDelay: `${i * 0.3}s`,
-              opacity: 0.3 + Math.random() * 0.4,
-            }} />
-          ))}
-        </div>
-        {/* Golden gate / door */}
-        <svg className="heaven-gate" viewBox="0 0 300 400" preserveAspectRatio="xMidYMid meet">
-          {/* Door frame */}
-          <rect x="60" y="50" width="180" height="320" rx="5" fill="none" stroke="rgba(255,215,0,0.6)" strokeWidth="3" />
-          {/* Arch top */}
-          <path d="M60,150 Q150,20 240,150" fill="none" stroke="rgba(255,215,0,0.7)" strokeWidth="3" />
-          {/* Door panels */}
-          <rect x="65" y="55" width="85" height="310" fill="rgba(255,215,0,0.05)" stroke="rgba(255,215,0,0.3)" strokeWidth="1" className="heaven-door-left" />
-          <rect x="150" y="55" width="85" height="310" fill="rgba(255,215,0,0.05)" stroke="rgba(255,215,0,0.3)" strokeWidth="1" className="heaven-door-right" />
-          {/* Door handles */}
-          <circle cx="140" cy="220" r="5" fill="rgba(255,215,0,0.6)" />
-          <circle cx="160" cy="220" r="5" fill="rgba(255,215,0,0.6)" />
-          {/* Cross on door */}
-          <line x1="150" y1="80" x2="150" y2="140" stroke="rgba(255,215,0,0.4)" strokeWidth="2" />
-          <line x1="120" y1="110" x2="180" y2="110" stroke="rgba(255,215,0,0.4)" strokeWidth="2" />
-        </svg>
-        {/* Angel silhouette */}
-        <svg className="heaven-angel" viewBox="0 0 120 180" preserveAspectRatio="xMidYMid meet">
-          {/* Halo */}
-          <ellipse cx="60" cy="20" rx="18" ry="6" fill="none" stroke="rgba(255,215,0,0.8)" strokeWidth="2" className="halo-glow" />
-          {/* Head */}
-          <circle cx="60" cy="35" r="12" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.5)" strokeWidth="1" />
-          {/* Body / robe */}
-          <path d="M48,47 L38,140 Q60,155 82,140 L72,47" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.4)" strokeWidth="1" />
-          {/* Wings */}
-          <path d="M48,55 Q15,30 10,70 Q20,80 42,65" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
-          <path d="M72,55 Q105,30 110,70 Q100,80 78,65" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
-          {/* Knocking arm extended */}
-          <line x1="72" y1="65" x2="100" y2="55" stroke="rgba(255,255,255,0.5)" strokeWidth="2" strokeLinecap="round" className="angel-knock" />
-          <circle cx="100" cy="55" r="3" fill="rgba(255,255,255,0.6)" className="angel-knock" />
-        </svg>
-        <div className="heaven-text">KNOCKING ON HEAVEN'S DOOR</div>
-        <div className="heaven-subtext">✦ THE GATES OPEN ✦</div>
-      </div>
-
-      {/* ═══ PHASE 7: BATTLE MODE — tanks & panzers ═══ */}
+      {/* ═══ PHASE 6: BATTLE MODE — tanks & panzers ═══ */}
       <div className="battle-layer">
         <div className="battle-bg" />
         <div className="battle-smoke">
@@ -421,38 +370,6 @@ function TargetLockReveal({ route, onComplete }) {
         <div className="civilwar-paper" />
       </div>
 
-      {/* ═══ PHASE 9: KEN BURNS — documentary zoom ═══ */}
-      <div className="burns-layer">
-        <div className="burns-bg" />
-        {/* Slow-zoom photo frame */}
-        <div className="burns-photo-frame">
-          <div className="burns-photo" style={{ backgroundImage: `url(${tileUrl})` }} />
-          <div className="burns-photo-border" />
-        </div>
-        {/* Documentary narration text — appears letter by letter style */}
-        <div className="burns-narration">
-          <div className="burns-quote">"The trail stretched before them,</div>
-          <div className="burns-quote q2">a ribbon of earth cutting through Georgetown..."</div>
-        </div>
-        {/* Route card reveal */}
-        <div className="burns-card">
-          <div className="burns-card-inner">
-            <div className="burns-card-header">— {route.name} —</div>
-            <div className="burns-card-color" style={{ background: route.color, boxShadow: `0 0 12px ${route.color}` }} />
-            <div className="burns-card-stats">
-              <span>{route.distance} MILES</span>
-              <span>·</span>
-              <span>{route.duration}</span>
-              <span>·</span>
-              <span>{route.type.toUpperCase()}</span>
-            </div>
-            <div className="burns-card-coords">{center[0].toFixed(4)}°N · {Math.abs(center[1]).toFixed(4)}°W</div>
-          </div>
-        </div>
-        <div className="burns-credit">A KEN BURNS PRODUCTION</div>
-        {/* Sepia film grain */}
-        <div className="burns-grain" />
-      </div>
     </div>
   );
 }
