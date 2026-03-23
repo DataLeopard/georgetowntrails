@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { getRoutesByPeriod } from '../data/routes';
 
 const VIEW_MODES = ['days', 'weeks', 'months'];
@@ -57,169 +57,10 @@ function RoutePreviewPath({ coords, color, size = 60 }) {
   );
 }
 
-/** Epic multi-phase cinematic reveal */
-function TargetLockReveal({ route, onComplete }) {
-  const [phase, setPhase] = useState('warp');
-
-  useEffect(() => {
-    const timers = [
-      setTimeout(() => setPhase('approach'), 600),
-      setTimeout(() => setPhase('scan'), 1200),
-      setTimeout(() => setPhase('land'), 2200),
-      setTimeout(() => setPhase('exit'), 2800),
-      setTimeout(() => onComplete(), 3200),
-    ];
-    return () => timers.forEach(clearTimeout);
-  }, [onComplete]);
-
-  const center = getRouteCenter(route.coords);
-
-  return (
-    <div className={`alien-overlay alien-${phase}`}>
-      {/* ═══ PHASE 1-3: Space approach (existing) ═══ */}
-      <div className="alien-space" />
-
-      <div className="warp-tunnel">
-        {Array.from({ length: 40 }, (_, i) => (
-          <div key={i} className="warp-line" style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-            animationDelay: `${Math.random() * 0.5}s`,
-            animationDuration: `${0.4 + Math.random() * 0.4}s`,
-            transform: `rotate(${Math.atan2(50 - Math.random()*100, 50 - Math.random()*100) * 180/Math.PI}deg)`,
-          }} />
-        ))}
-      </div>
-
-      <div className="alien-nebula" />
-
-      <div className="alien-stars">
-        {Array.from({ length: 60 }, (_, i) => (
-          <div key={i} className="alien-star" style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-            animationDelay: `${Math.random() * 3}s`,
-            width: `${1 + Math.random() * 2.5}px`,
-            height: `${1 + Math.random() * 2.5}px`,
-            background: i % 5 === 0 ? '#ff6bff' : i % 3 === 0 ? '#6bffff' : 'white',
-          }} />
-        ))}
-      </div>
-
-      <svg className="hex-grid" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid meet">
-        <polygon points="300,30 540,165 540,435 300,570 60,435 60,165" fill="none" stroke="rgba(0,255,255,0.15)" strokeWidth="1.5" className="hex-spin" />
-        <polygon points="300,60 510,180 510,420 300,540 90,420 90,180" fill="none" stroke="rgba(0,255,255,0.1)" strokeWidth="1" strokeDasharray="10 5" className="hex-spin-rev" />
-        <polygon points="300,100 470,200 470,400 300,500 130,400 130,200" fill="none" stroke="rgba(180,100,255,0.2)" strokeWidth="1.5" />
-        <polygon points="300,150 430,220 430,380 300,450 170,380 170,220" fill="none" stroke="rgba(0,255,255,0.25)" strokeWidth="1" strokeDasharray="6 8" className="hex-spin" />
-        <polygon points="300,200 380,250 380,350 300,400 220,350 220,250" fill="none" stroke="rgba(255,100,200,0.3)" strokeWidth="2" />
-        <circle cx="300" cy="300" r="40" fill="none" stroke="rgba(0,255,255,0.4)" strokeWidth="2" className="alien-eye-pulse" />
-        <circle cx="300" cy="300" r="15" fill="none" stroke="rgba(255,0,200,0.6)" strokeWidth="2" />
-        <circle cx="300" cy="300" r="5" fill="rgba(255,0,200,0.8)" className="alien-core-pulse" />
-        {[0, 60, 120, 180, 240, 300].map(angle => {
-          const rad = (angle * Math.PI) / 180;
-          return (
-            <line key={angle}
-              x1={300 + 50 * Math.cos(rad)} y1={300 + 50 * Math.sin(rad)}
-              x2={300 + 260 * Math.cos(rad)} y2={300 + 260 * Math.sin(rad)}
-              stroke="rgba(0,255,255,0.12)" strokeWidth="1"
-            />
-          );
-        })}
-        {[[300,30],[540,165],[540,435],[300,570],[60,435],[60,165]].map(([x,y], i) => (
-          <g key={i}>
-            <circle cx={x} cy={y} r="6" fill="rgba(0,255,255,0.3)" className="node-pulse" style={{animationDelay:`${i*0.2}s`}} />
-            <circle cx={x} cy={y} r="3" fill="rgba(0,255,255,0.7)" />
-          </g>
-        ))}
-        <text x="300" y="85" textAnchor="middle" fill="rgba(0,255,255,0.4)" fontSize="9" fontFamily="monospace">XENO-NAV // SECTOR 7G</text>
-        <text x="300" y="555" textAnchor="middle" fill="rgba(0,255,255,0.3)" fontSize="9" fontFamily="monospace">ORBITAL DESCENT PROTOCOL</text>
-        <text x="75" y="300" fill="rgba(180,100,255,0.4)" fontSize="8" fontFamily="monospace" transform="rotate(-90,75,300)">HULL INTEGRITY 98.7%</text>
-        <text x="525" y="300" fill="rgba(180,100,255,0.4)" fontSize="8" fontFamily="monospace" transform="rotate(90,525,300)">SHIELDS NOMINAL</text>
-      </svg>
-
-      <svg className="cyborg-pilot" viewBox="0 0 200 160" preserveAspectRatio="xMidYMax meet">
-        <rect x="60" y="140" width="80" height="10" rx="3" fill="rgba(0,255,255,0.08)" stroke="rgba(0,255,255,0.15)" strokeWidth="1" />
-        <path d="M70,140 L65,90 Q65,80 75,80 L125,80 Q135,80 135,90 L130,140" fill="rgba(0,255,255,0.05)" stroke="rgba(0,255,255,0.12)" strokeWidth="1" />
-        <line x1="100" y1="75" x2="100" y2="120" stroke="rgba(0,255,255,0.2)" strokeWidth="5" strokeLinecap="round" />
-        <ellipse cx="100" cy="55" rx="14" ry="20" fill="rgba(0,255,255,0.1)" stroke="rgba(0,255,255,0.2)" strokeWidth="1" />
-        <ellipse cx="93" cy="50" rx="6" ry="4" fill="rgba(255,0,200,0.3)" className="alien-eye-glow" />
-        <ellipse cx="107" cy="50" rx="6" ry="4" fill="rgba(255,0,200,0.3)" className="alien-eye-glow" />
-        <ellipse cx="93" cy="50" rx="3" ry="2" fill="rgba(255,0,200,0.7)" />
-        <ellipse cx="107" cy="50" rx="3" ry="2" fill="rgba(255,0,200,0.7)" />
-        <line x1="90" y1="85" x2="55" y2="105" stroke="rgba(0,255,255,0.15)" strokeWidth="3" strokeLinecap="round" />
-        <line x1="110" y1="85" x2="145" y2="105" stroke="rgba(0,255,255,0.15)" strokeWidth="3" strokeLinecap="round" />
-        <circle cx="55" cy="105" r="4" fill="rgba(0,255,255,0.1)" stroke="rgba(0,255,255,0.2)" strokeWidth="1" />
-        <circle cx="145" cy="105" r="4" fill="rgba(0,255,255,0.1)" stroke="rgba(0,255,255,0.2)" strokeWidth="1" />
-        <line x1="95" y1="120" x2="85" y2="145" stroke="rgba(0,255,255,0.12)" strokeWidth="3" strokeLinecap="round" />
-        <line x1="105" y1="120" x2="115" y2="145" stroke="rgba(0,255,255,0.12)" strokeWidth="3" strokeLinecap="round" />
-        <line x1="86" y1="42" x2="78" y2="38" stroke="rgba(0,255,255,0.3)" strokeWidth="1" />
-        <line x1="114" y1="42" x2="122" y2="38" stroke="rgba(0,255,255,0.3)" strokeWidth="1" />
-        <circle cx="78" cy="38" r="2" fill="rgba(0,255,255,0.5)" className="node-pulse" />
-        <circle cx="122" cy="38" r="2" fill="rgba(0,255,255,0.5)" className="node-pulse" />
-        <line x1="100" y1="75" x2="100" y2="40" stroke="rgba(255,0,200,0.15)" strokeWidth="1" strokeDasharray="2 3" />
-      </svg>
-
-      <div className="holo-panel holo-left">
-        <div className="holo-title">PLANETARY DATA</div>
-        <div className="holo-row"><span>MASS</span><span className="holo-val">5.97×10²⁴</span></div>
-        <div className="holo-row"><span>GRAV</span><span className="holo-val">9.81 m/s²</span></div>
-        <div className="holo-row"><span>ATM</span><span className="holo-val">N₂/O₂</span></div>
-        <div className="holo-row"><span>TEMP</span><span className="holo-val">295K</span></div>
-        <div className="holo-bar"><div className="holo-bar-fill holo-bar-1" /></div>
-        <div className="holo-row"><span>FUEL</span><span className="holo-val">73%</span></div>
-        <div className="holo-bar"><div className="holo-bar-fill holo-bar-2" /></div>
-      </div>
-
-      <div className="holo-panel holo-right">
-        <div className="holo-title">LANDING SEQ</div>
-        <div className="holo-row"><span>ALT</span><span className="holo-val alien-descent">12,400 ft</span></div>
-        <div className="holo-row"><span>VEL</span><span className="holo-val">MACH 0.3</span></div>
-        <div className="holo-row"><span>ANG</span><span className="holo-val">-4.2°</span></div>
-        <div className="holo-row"><span>ETA</span><span className="holo-val alien-blink">00:03</span></div>
-        <div className="holo-bar"><div className="holo-bar-fill holo-bar-3" /></div>
-        <div className="holo-row"><span>SHLD</span><span className="holo-val">ACTIVE</span></div>
-        <div className="holo-bar"><div className="holo-bar-fill holo-bar-4" /></div>
-      </div>
-
-      <div className="alien-hud-top">
-        <span className="alien-blink">◆ LIVE FEED</span>
-        <span className="alien-title">CYBORG NAVIGATION SYSTEM v7.2.1</span>
-        <span className="alien-data">SECTOR {route.id}-ALPHA</span>
-      </div>
-
-      <div className="alien-hud-bottom">
-        <span className="alien-data">LAT {center[0].toFixed(4)}</span>
-        <span className="alien-lock">◈ TOUCHDOWN IMMINENT ◈</span>
-        <span className="alien-data">LON {center[1].toFixed(4)}</span>
-      </div>
-
-      {/* Landing target card */}
-      <div className="alien-target-card">
-        <div className="alien-card-glow" />
-        <div className="alien-card-inner">
-          <div className="alien-card-header">◇ LANDING ZONE CONFIRMED ◇</div>
-          <div className="alien-card-color" style={{ background: route.color, boxShadow: `0 0 12px ${route.color}` }} />
-          <div className="alien-card-name">{route.name}</div>
-          <div className="alien-card-stats">
-            <span>{route.distance} MI</span>
-            <span>•</span>
-            <span>{route.duration}</span>
-            <span>•</span>
-            <span>{route.type.toUpperCase()}</span>
-          </div>
-          <div className="alien-card-coords">{center[0].toFixed(4)}°N · {Math.abs(center[1]).toFixed(4)}°W</div>
-        </div>
-      </div>
-
-    </div>
-  );
-}
-
 export default function Sidebar({ routes, activeRouteId, onRouteClick, isOpen, onToggle }) {
   const [viewMode, setViewMode] = useState('weeks');
   const [collapsed, setCollapsed] = useState({});
   const [searchTerm, setSearchTerm] = useState('');
-  const [revealRoute, setRevealRoute] = useState(null);
 
   const filteredRoutes = useMemo(() => {
     if (!searchTerm.trim()) return routes;
@@ -238,15 +79,8 @@ export default function Sidebar({ routes, activeRouteId, onRouteClick, isOpen, o
   const toggleGroup = (key) => setCollapsed(c => ({ ...c, [key]: !c[key] }));
 
   const handleRouteClick = useCallback((route) => {
-    setRevealRoute(route);
-  }, []);
-
-  const handleRevealComplete = useCallback(() => {
-    if (revealRoute) {
-      onRouteClick(revealRoute.id);
-    }
-    setRevealRoute(null);
-  }, [revealRoute, onRouteClick]);
+    onRouteClick(route.id);
+  }, [onRouteClick]);
 
   return (
     <>
@@ -340,9 +174,6 @@ export default function Sidebar({ routes, activeRouteId, onRouteClick, isOpen, o
         </div>
       </aside>
 
-      {revealRoute && (
-        <TargetLockReveal route={revealRoute} onComplete={handleRevealComplete} />
-      )}
     </>
   );
 }
