@@ -65,12 +65,9 @@ function TargetLockReveal({ route, onComplete }) {
     const timers = [
       setTimeout(() => setPhase('approach'), 600),
       setTimeout(() => setPhase('scan'), 1200),
-      setTimeout(() => setPhase('asteroids'), 1800),
-      setTimeout(() => setPhase('explode'), 2600),
-      setTimeout(() => setPhase('battle'), 3400),
-      setTimeout(() => setPhase('civilwar'), 4400),
-      setTimeout(() => setPhase('exit'), 5400),
-      setTimeout(() => onComplete(), 5800),
+      setTimeout(() => setPhase('land'), 2200),
+      setTimeout(() => setPhase('exit'), 2800),
+      setTimeout(() => onComplete(), 3200),
     ];
     return () => timers.forEach(clearTimeout);
   }, [onComplete]);
@@ -196,178 +193,22 @@ function TargetLockReveal({ route, onComplete }) {
         <span className="alien-data">LON {center[1].toFixed(4)}</span>
       </div>
 
-      {/* ═══ PHASE 4: ASTEROIDS — retro vector text ═══ */}
-      <div className="asteroids-layer">
-        <div className="asteroids-screen-border" />
-        <div className="asteroids-text-main">INCOMING</div>
-        <div className="asteroids-text-sub">COLLISION COURSE DETECTED</div>
-        <div className="asteroids-score">SCORE: 0000042069</div>
-        <div className="asteroids-lives">
-          <span>▲</span><span>▲</span><span>▲</span>
+      {/* Landing target card */}
+      <div className="alien-target-card">
+        <div className="alien-card-glow" />
+        <div className="alien-card-inner">
+          <div className="alien-card-header">◇ LANDING ZONE CONFIRMED ◇</div>
+          <div className="alien-card-color" style={{ background: route.color, boxShadow: `0 0 12px ${route.color}` }} />
+          <div className="alien-card-name">{route.name}</div>
+          <div className="alien-card-stats">
+            <span>{route.distance} MI</span>
+            <span>•</span>
+            <span>{route.duration}</span>
+            <span>•</span>
+            <span>{route.type.toUpperCase()}</span>
+          </div>
+          <div className="alien-card-coords">{center[0].toFixed(4)}°N · {Math.abs(center[1]).toFixed(4)}°W</div>
         </div>
-        {/* Vector asteroids floating */}
-        {Array.from({ length: 8 }, (_, i) => (
-          <svg key={i} className="asteroid-rock" style={{
-            left: `${10 + Math.random() * 80}%`,
-            top: `${10 + Math.random() * 80}%`,
-            width: `${30 + Math.random() * 40}px`,
-            animationDelay: `${Math.random() * 2}s`,
-            animationDuration: `${3 + Math.random() * 4}s`,
-          }} viewBox="0 0 40 40">
-            <polygon points="20,2 35,10 38,25 30,38 12,36 3,22 8,8" fill="none" stroke="white" strokeWidth="1.5" />
-          </svg>
-        ))}
-        {/* Player ship */}
-        <svg className="asteroids-ship" viewBox="0 0 30 30">
-          <polygon points="15,2 28,28 15,22 2,28" fill="none" stroke="white" strokeWidth="1.5" />
-        </svg>
-        {/* Bullet trails */}
-        <div className="asteroids-bullet b1" />
-        <div className="asteroids-bullet b2" />
-        <div className="asteroids-bullet b3" />
-      </div>
-
-      {/* ═══ PHASE 5: EXPLOSION ═══ */}
-      <div className="explode-layer">
-        <div className="explosion-flash" />
-        <div className="explosion-core" />
-        {/* Debris particles */}
-        {Array.from({ length: 24 }, (_, i) => {
-          const angle = (i / 24) * 360;
-          const dist = 100 + Math.random() * 300;
-          return (
-            <div key={i} className="explosion-debris" style={{
-              '--angle': `${angle}deg`,
-              '--dist': `${dist}px`,
-              '--size': `${2 + Math.random() * 6}px`,
-              '--color': i % 3 === 0 ? '#ff4400' : i % 3 === 1 ? '#ffaa00' : '#ff0066',
-              animationDelay: `${Math.random() * 0.15}s`,
-            }} />
-          );
-        })}
-        {/* Shockwave rings */}
-        <div className="shockwave ring1" />
-        <div className="shockwave ring2" />
-        <div className="explosion-text">DIRECT HIT</div>
-      </div>
-
-      {/* ═══ PHASE 6: BATTLE MODE — tanks & panzers ═══ */}
-      <div className="battle-layer">
-        <div className="battle-bg" />
-        <div className="battle-smoke">
-          {Array.from({ length: 10 }, (_, i) => (
-            <div key={i} className="smoke-puff" style={{
-              left: `${Math.random() * 100}%`,
-              bottom: `${10 + Math.random() * 30}%`,
-              animationDelay: `${Math.random() * 2}s`,
-              animationDuration: `${2 + Math.random() * 3}s`,
-            }} />
-          ))}
-        </div>
-        {/* Tank 1 — left */}
-        <svg className="battle-tank tank-left" viewBox="0 0 200 100" preserveAspectRatio="xMidYMid meet">
-          {/* Tracks */}
-          <rect x="10" y="65" width="180" height="25" rx="12" fill="rgba(80,90,60,0.8)" stroke="rgba(120,130,80,0.6)" strokeWidth="2" />
-          {/* Track wheels */}
-          {[30,60,90,120,150].map(x => <circle key={x} cx={x} cy="77" r="8" fill="rgba(50,55,40,0.9)" stroke="rgba(100,110,70,0.5)" strokeWidth="1.5" />)}
-          {/* Hull */}
-          <polygon points="25,65 40,35 160,35 175,65" fill="rgba(90,100,65,0.85)" stroke="rgba(120,130,80,0.6)" strokeWidth="1.5" />
-          {/* Turret */}
-          <rect x="70" y="25" width="60" height="20" rx="3" fill="rgba(80,90,55,0.9)" stroke="rgba(110,120,70,0.6)" strokeWidth="1.5" />
-          {/* Gun barrel */}
-          <rect x="130" y="30" width="55" height="8" rx="2" fill="rgba(70,80,50,0.9)" stroke="rgba(100,110,65,0.6)" strokeWidth="1" />
-          {/* Muzzle flash */}
-          <polygon points="185,25 200,34 185,43" fill="rgba(255,200,0,0.7)" className="muzzle-flash" />
-          {/* Star emblem */}
-          <text x="100" y="55" textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="14">★</text>
-        </svg>
-        {/* Tank 2 — right (Panzer style) */}
-        <svg className="battle-tank tank-right" viewBox="0 0 200 100" preserveAspectRatio="xMidYMid meet">
-          <rect x="10" y="65" width="180" height="25" rx="12" fill="rgba(70,70,60,0.8)" stroke="rgba(100,100,80,0.6)" strokeWidth="2" />
-          {[30,60,90,120,150].map(x => <circle key={x} cx={x} cy="77" r="8" fill="rgba(45,45,35,0.9)" stroke="rgba(80,80,60,0.5)" strokeWidth="1.5" />)}
-          <polygon points="25,65 40,35 160,35 175,65" fill="rgba(75,75,60,0.85)" stroke="rgba(100,100,75,0.6)" strokeWidth="1.5" />
-          <rect x="65" y="22" width="70" height="22" rx="4" fill="rgba(65,65,50,0.9)" stroke="rgba(90,90,65,0.6)" strokeWidth="1.5" />
-          <rect x="10" y="29" width="60" height="8" rx="2" fill="rgba(60,60,45,0.9)" stroke="rgba(85,85,60,0.6)" strokeWidth="1" />
-          <polygon points="10,20 -5,33 10,46" fill="rgba(255,150,0,0.7)" className="muzzle-flash" />
-          {/* Iron cross */}
-          <g transform="translate(100,53)">
-            <line x1="-6" y1="0" x2="6" y2="0" stroke="rgba(255,255,255,0.5)" strokeWidth="3" />
-            <line x1="0" y1="-6" x2="0" y2="6" stroke="rgba(255,255,255,0.5)" strokeWidth="3" />
-          </g>
-        </svg>
-        {/* Explosions in background */}
-        <div className="battle-explosion be1" />
-        <div className="battle-explosion be2" />
-        <div className="battle-explosion be3" />
-        <div className="battle-hud">
-          <span>◆ BATTLE MODE ENGAGED ◆</span>
-          <span>SURVEYING THE DAMAGE</span>
-        </div>
-        <div className="battle-text-main">TAKE THESE GUNS AWAY</div>
-        <div className="battle-text-sub">I CAN'T USE THEM ANYMORE</div>
-      </div>
-
-      {/* ═══ PHASE 8: CIVIL WAR — Lincoln points at property ═══ */}
-      <div className="civilwar-layer">
-        <div className="civilwar-bg" />
-        <div className="civilwar-vignette" />
-        {/* Abraham Lincoln SVG */}
-        <svg className="lincoln-svg" viewBox="0 0 200 400" preserveAspectRatio="xMidYMid meet">
-          {/* Top hat */}
-          <rect x="65" y="10" width="70" height="80" rx="3" fill="rgba(30,20,10,0.9)" stroke="rgba(80,60,30,0.5)" strokeWidth="1.5" />
-          <rect x="50" y="85" width="100" height="10" rx="2" fill="rgba(30,20,10,0.9)" stroke="rgba(80,60,30,0.5)" strokeWidth="1" />
-          {/* Hat band */}
-          <rect x="65" y="75" width="70" height="8" fill="rgba(60,40,20,0.8)" />
-          {/* Face */}
-          <ellipse cx="100" cy="120" rx="30" ry="35" fill="rgba(210,180,140,0.25)" stroke="rgba(180,150,100,0.5)" strokeWidth="1" />
-          {/* Beard */}
-          <path d="M75,130 Q80,170 100,175 Q120,170 125,130" fill="rgba(50,35,20,0.4)" stroke="rgba(80,60,30,0.3)" strokeWidth="1" />
-          {/* Eyes */}
-          <circle cx="88" cy="112" r="3" fill="rgba(40,30,20,0.7)" />
-          <circle cx="112" cy="112" r="3" fill="rgba(40,30,20,0.7)" />
-          {/* Nose */}
-          <line x1="100" y1="115" x2="100" y2="130" stroke="rgba(180,140,100,0.4)" strokeWidth="1.5" />
-          {/* Mouth */}
-          <line x1="90" y1="140" x2="110" y2="140" stroke="rgba(150,100,70,0.4)" strokeWidth="1" />
-          {/* Body — Civil War coat */}
-          <path d="M65,175 L55,320 Q100,340 145,320 L135,175" fill="rgba(30,40,80,0.6)" stroke="rgba(60,70,120,0.5)" strokeWidth="1.5" />
-          {/* Double-breasted buttons */}
-          {[195, 215, 235, 255, 275, 295].map(y => (
-            <g key={y}>
-              <circle cx="85" cy={y} r="3" fill="rgba(200,180,50,0.6)" />
-              <circle cx="115" cy={y} r="3" fill="rgba(200,180,50,0.6)" />
-            </g>
-          ))}
-          {/* Belt */}
-          <rect x="60" y="260" width="80" height="6" fill="rgba(60,40,20,0.7)" />
-          <rect x="95" y="258" width="10" height="10" rx="1" fill="rgba(200,180,50,0.5)" />
-          {/* Right arm — pointing */}
-          <line x1="135" y1="190" x2="190" y2="170" stroke="rgba(30,40,80,0.6)" strokeWidth="8" strokeLinecap="round" />
-          <line x1="190" y1="170" x2="198" y2="165" stroke="rgba(210,180,140,0.3)" strokeWidth="4" strokeLinecap="round" />
-          {/* Left arm down */}
-          <line x1="65" y1="190" x2="50" y2="260" stroke="rgba(30,40,80,0.6)" strokeWidth="8" strokeLinecap="round" />
-          {/* Legs */}
-          <line x1="85" y1="320" x2="80" y2="390" stroke="rgba(30,30,30,0.6)" strokeWidth="8" strokeLinecap="round" />
-          <line x1="115" y1="320" x2="120" y2="390" stroke="rgba(30,30,30,0.6)" strokeWidth="8" strokeLinecap="round" />
-          {/* Boots */}
-          <ellipse cx="80" cy="392" rx="12" ry="5" fill="rgba(30,20,10,0.7)" />
-          <ellipse cx="120" cy="392" rx="12" ry="5" fill="rgba(30,20,10,0.7)" />
-        </svg>
-        {/* Pointing indicator — arrow from Lincoln's hand */}
-        <div className="lincoln-point-arrow">
-          <svg viewBox="0 0 80 30">
-            <polygon points="0,10 60,10 60,0 80,15 60,30 60,20 0,20" fill="rgba(200,180,50,0.6)" />
-          </svg>
-        </div>
-        {/* Property label */}
-        <div className="lincoln-property-label">
-          <div className="lincoln-label-text">THIS PROPERTY</div>
-          <div className="lincoln-label-name">{route.name}</div>
-        </div>
-        <div className="civilwar-text">FOUR SCORE AND SEVEN TRAILS AGO</div>
-        <div className="civilwar-subtext">A. LINCOLN DESIGNATES THIS ROUTE</div>
-        {/* Old paper / parchment texture overlay */}
-        <div className="civilwar-paper" />
       </div>
 
     </div>
